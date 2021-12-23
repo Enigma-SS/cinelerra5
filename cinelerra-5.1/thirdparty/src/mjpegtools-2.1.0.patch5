@@ -1,0 +1,12 @@
+--- ./mpeg2enc/seqencoder.cc.orig	2021-08-12 22:15:24.907277309 +0300
++++ ./mpeg2enc/seqencoder.cc	2021-08-12 22:17:49.471277317 +0300
+@@ -198,7 +198,9 @@
+ {
+ 	EncoderJob *job;
+ 	mjpeg_debug( "Worker thread started" );
++#if !defined (__TERMUX__)
+     pthread_setcanceltype( PTHREAD_CANCEL_ASYNCHRONOUS, NULL );
++#endif
+ 
+ 	for(;;)
+ 	{

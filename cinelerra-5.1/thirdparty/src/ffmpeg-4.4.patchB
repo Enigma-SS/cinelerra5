@@ -1,0 +1,43 @@
+diff --git a/libavcodec/encode.c b/libavcodec/encode_fprint.c
+index 89df523..cca0cc1 100644
+--- a/libavcodec/encode.c
++++ b/libavcodec/encode_fprint.c
+@@ -191,7 +191,7 @@ static int encode_simple_internal(AVCodecContext *avctx, AVPacket *avpkt)
+     }
+ 
+     if (!frame->buf[0]) {
+-        if (!(avctx->codec->capabilities & AV_CODEC_CAP_DELAY ||
++        if (avci->draining && !(avctx->codec->capabilities & AV_CODEC_CAP_DELAY ||
+               (avci->frame_thread_encoder && avctx->active_thread_type & FF_THREAD_FRAME)))
+             return AVERROR_EOF;
+ 
+@@ -246,8 +246,10 @@ static int encode_simple_internal(AVCodecContext *avctx, AVPacket *avpkt)
+         }
+     }
+ 
+-    if (avci->draining && !got_packet)
++    if (avci->draining && !got_packet) {
++	fflush(stderr);
+         avci->draining_done = 1;
++    }
+ 
+ end:
+     if (ret < 0 || !got_packet)
+@@ -372,10 +374,16 @@ int attribute_align_arg avcodec_send_frame(AVCodecContext *avctx, const AVFrame
+     if (avci->draining)
+         return AVERROR_EOF;
+ 
+-    if (avci->buffer_frame->data[0])
++    if (avci->buffer_frame->data[0]) {
++        if (!frame) {
++	    fflush(stderr);
++            av_frame_unref(avci->buffer_frame);
++	}
+         return AVERROR(EAGAIN);
++    }
+ 
+     if (!frame) {
++	fflush(stderr);
+         avci->draining = 1;
+     } else {
+         ret = encode_send_frame_internal(avctx, frame);

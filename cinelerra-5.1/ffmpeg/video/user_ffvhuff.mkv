@@ -1,0 +1,6 @@
+matroska ffvhuff
+# FFvHuff is a further development of HuffYUV.
+# Lossless, fast and smaller file sizes than
+# HuffYUV. Lossless PCM is ideally suited as
+# an audio codec.
+# ffmpeg --help encoder=ffvhuff

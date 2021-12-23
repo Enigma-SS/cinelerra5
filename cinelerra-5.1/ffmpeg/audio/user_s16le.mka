@@ -1,0 +1,6 @@
+matroska pcm_s16le
+# PCM signed 16-bit little-endian (pcm_s16le) in
+# Matroska (Audio) container.
+# The extension should be "mka".
+# ffmpeg --help encoder=pcm_s16le
+# ffmpeg --help muxer=matroska

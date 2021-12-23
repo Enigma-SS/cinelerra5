@@ -1,0 +1,11 @@
+#!/bin/bash
+( ./autogen.sh
+  CYGWIN=1 CFLAGS="-g -O2" ./configure --with-single-user -without-gl \
+    --disable-static-build --without-lv2 --disable-lame --disable-twolame \
+    --without-oss --without-alsa --without-firewire --without-dv --without-dvb \
+    --without-video4linux2 --without-xxf86vm --without-ladspa-build \
+    --without-libzmpeg --without-commercial --without-thirdparty \
+    --without-vaapi --without-vdpau --without-shuttle \
+    --without-x10tv --without-wintv --without-ladspa
+  make
+  make install ) 2>&1 | tee log

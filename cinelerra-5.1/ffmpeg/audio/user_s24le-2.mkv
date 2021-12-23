@@ -1,0 +1,7 @@
+matroska pcm_s24le
+# PCM signed 24-bit little-endian (pcm_s24le) in
+# Matroska container.
+# If only audio is exported, the extension should
+# be "mka".
+# ffmpeg --help encoder=pcm_s24le
+# ffmpeg --help muxer=matroska

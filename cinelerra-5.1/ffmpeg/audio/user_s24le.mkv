@@ -1,0 +1,5 @@
+matroska pcm_s24le
+# Lossless PCM (pcm_s24le) in Matroska container.
+# If onlyaudio is exported, the extension should
+# be "mka".
+# ffmpeg --help encoder=pcm_s24le

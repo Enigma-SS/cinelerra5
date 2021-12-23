@@ -1,0 +1,6 @@
+#!/bin/bash
+# Produced, tested, and used by Andrew-R on an Android tablet
+export FFMPEG_EXTRA_CFG="--disable-debug --disable-ffprobe --enable-libdav1d"
+export EXTRA_LIBS="-ldav1d"
+./configure --without-lv2 --without-vdpau --without-vaapi --without-ladspa-build \
+ --without-nv  --with-single-user --with-clang --without-gl --disable-dav1d

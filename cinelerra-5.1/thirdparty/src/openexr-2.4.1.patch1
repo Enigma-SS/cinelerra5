@@ -1,0 +1,24 @@
+From d891cfb0a2b8f6b48a9ede1a48aab022309100ed Mon Sep 17 00:00:00 2001
+From: "FeRD (Frank Dana)" <ferdnyc@gmail.com>
+Date: Mon, 14 Dec 2020 02:04:23 -0500
+Subject: [PATCH] Include limits for std::numeric_limits
+
+---
+ OpenEXR/IlmImf/ImfTiledMisc.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/OpenEXR/IlmImf/ImfTiledMisc.cpp b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+index 8552ada..bd865a1 100644
+--- a/OpenEXR/IlmImf/ImfTiledMisc.cpp
++++ b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+@@ -45,6 +45,7 @@
+ #include <ImfChannelList.h>
+ #include <ImfTileDescription.h>
+ #include <algorithm>
++#include <limits>
+ 
+ #include "ImfNamespace.h"
+ 
+-- 
+2.29.2
+

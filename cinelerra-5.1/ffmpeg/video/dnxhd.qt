@@ -1,0 +1,19 @@
+mov dnxhd
+b=120M
+
+# video parameters incompatible with DNxHD. Valid DNxHD profiles:
+# 1920x1080p; bitrate: 175,185,365,440 Mbps; pix_fmt: yuv422p10
+# 1920x1080p; bitrate: 115,120,145,240,290 Mbps; pix_fmt: yuv422p
+# 1920x1080p; bitrate: 175,185,220,365,440 Mbps; pix_fmt: yuv422p
+# 1920x1080i; bitrate: 185,220 Mbps; pix_fmt: yuv422p10
+# 1920x1080i; bitrate: 120,145,185,220 Mbps; pix_fmt: yuv422p
+# 1440x1080i; bitrate: 120,145 Mbps; pix_fmt: yuv422p
+# 1280x720p; bitrate: 90,180,220 Mbps; pix_fmt: yuv422p10
+# 1280x720p; bitrate: 90,110,180,220 Mbps; pix_fmt: yuv422p
+# 1280x720p; bitrate: 60,75,120,145 Mbps; pix_fmt: yuv422p
+# 1920x1080p; bitrate: 36,45,75,90 Mbps; pix_fmt: yuv422p
+# 1920x1080p; bitrate: 350,390,440,730 Mbps; pix_fmt: yuv444p10, gbrp10
+# 1920x1080p; bitrate: 880Mbps; pix_fmt: yuv444p10, gbrp10
+# 960x720p; bitrate: 42,60,75,115 Mbps; pix_fmt: yuv422p
+# 1440x1080p; bitrate: 63,84,100,110 Mbps; pix_fmt: yuv422p
+# 1440x1080i; bitrate: 80,90,100,110 Mbps; pix_fmt: yuv422p

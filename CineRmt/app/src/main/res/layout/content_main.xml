@@ -1,0 +1,303 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    tools:context=".MainActivity"
+    tools:ignore="MergeRootFrame"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="6sp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <ImageButton style="@style/btn"
+                    android:id="@+id/menu"
+                    android:src="@mipmap/menu" />
+
+                <ImageButton style="@style/btn"
+                    android:id="@+id/config"
+                    android:src="@mipmap/config" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <ImageButton style="@style/btn"
+                        android:id="@+id/media_up"
+                        android:src="@mipmap/media_up" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <ImageButton style="@style/btn"
+                        android:id="@+id/media_lt"
+                        android:src="@mipmap/media_lt" />
+
+                    <ImageButton style="@style/btn"
+                        android:id="@+id/pause"
+                        android:src="@mipmap/pause" />
+
+                    <ImageButton style="@style/btn"
+                        android:id="@+id/media_rt"
+                        android:src="@mipmap/media_rt" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <ImageButton style="@style/btn"
+                        android:id="@+id/media_dn"
+                        android:src="@mipmap/media_dn" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <ImageButton style="@style/btn"
+                    android:id="@+id/power"
+                    android:src="@mipmap/power" />
+
+                <ImageButton style="@style/btn"
+                    android:id="@+id/suspend"
+                    android:src="@mipmap/suspend" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="20sp"
+            android:gravity="center_vertical">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/fast_lt"
+                android:src="@mipmap/fast_lt" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/rplay"
+                android:src="@mipmap/rev" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/stop"
+                android:src="@mipmap/stop" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/play"
+                android:src="@mipmap/play" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/fast_rt"
+                android:src="@mipmap/fast_rt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonTV"
+                android:src="@mipmap/ztv" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/slow_lt"
+                android:src="@mipmap/slow_lt" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/full_scr"
+                android:src="@mipmap/full_scr" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/slow_rt"
+                android:src="@mipmap/slow_rt" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/quit"
+                android:src="@mipmap/zquit" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12sp"
+            android:gravity="top">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="12sp">
+                <ImageButton style="@style/btn"
+                    android:id="@+id/vol_up"
+                    android:src="@mipmap/zvolup" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:paddingTop="8sp">
+                <ImageButton style="@style/btn"
+                    android:id="@+id/vol_dn"
+                    android:src="@mipmap/zvoldn" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="12sp">
+                <ImageButton style="@style/btn"
+                    android:id="@+id/mute"
+                    android:src="@mipmap/zmute" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingTop="8sp">
+                <ImageButton style="@style/btn"
+                    android:id="@+id/ch_up"
+                    android:src="@mipmap/zch_up" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingBottom="12sp">
+
+            <ImageButton style="@style/btn"
+                android:layout_gravity="top"
+                android:id="@+id/ch_dn"
+                android:src="@mipmap/zch_dn" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonA"
+                android:src="@mipmap/zfiga" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button1"
+                android:src="@mipmap/zfig1" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button2"
+                android:src="@mipmap/zfig2" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button3"
+                android:src="@mipmap/zfig3" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonD"
+                android:src="@mipmap/zfigd" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonB"
+                android:src="@mipmap/zfigb" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button4"
+                android:src="@mipmap/zfig4" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button5"
+                android:src="@mipmap/zfig5" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button6"
+                android:src="@mipmap/zfig6" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonE"
+                android:src="@mipmap/zfige" />
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonC"
+                android:src="@mipmap/zfigc" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button7"
+                android:src="@mipmap/zfig7" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button8"
+                android:src="@mipmap/zfig8" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button9"
+                android:src="@mipmap/zfig9" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonF"
+                android:src="@mipmap/zfigf" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonDOT"
+                android:src="@mipmap/zfigdot" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/button0"
+                android:src="@mipmap/zfig0" />
+
+            <ImageButton style="@style/btn"
+                android:id="@+id/buttonCC"
+                android:src="@mipmap/zfigcc" />
+        </LinearLayout>
+    </LinearLayout>
+q
+</FrameLayout>

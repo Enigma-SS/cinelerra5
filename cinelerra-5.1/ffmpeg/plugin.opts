@@ -1,0 +1,427 @@
+abench
+#abitscope rate=25:size=1024x256 ###Input/output error
+#abuffer abuffer=sample_rate=48000:sample_fmt=s16p:channel_layout=stereo ###Invalid argument
+#abuffersink ###Input/output error
+acompressor
+#acrossfade ###Input/output error
+acrusher
+adelay delays=1
+#adrawgraph signalstats,drawgraph=lavfi.signalstats.YAVG:min=0:max=255 ###Input/output error
+aecho
+aemphasis
+aeval exprs=(sin(2*PI*t*440)+sin(2*PI*t*350))/2*mod(floor(2*t),2):channel_layout=1c
+#aevalsrc 0 ###Cannot allocate memory
+afade
+#afftfilt 1-clip((b/nb)*b,0,1)
+#afifo  ###will not work within cin
+aformat sample_fmts=u8|s16:channel_layouts=stereo
+agate
+#ahistogram dmode=single:r=25:s=hd720:scale=log:ascale=log:slide=replace ###Input/output error
+#ainterleave
+#alimiter
+allpass
+allrgb
+allyuv
+aloop
+#alphaextract ###Operation not permitted
+#alphamerge ###Input/output error
+#amerge ###Operation not permitted
+#ametadata mode=add:file=/tmp/ametadata.txt
+#amix ###Operation not permitted
+#amovie ###Operation not permitted
+#anequalizer c0 f=200 w=100 g=-10 t=1|c1 f=200 w=100 g=-10 t=1 ###Operation not permitted
+anoisesrc d=60:c=pink:r=48000:a=0.5
+#anull
+#anullsink ###Input/output error
+#anullsrc
+#apad   ###not part of frame data
+aperms
+#aphasemeter r=25:s=800x400:rc=2:gc=7:bc=1 ###Operation not permitted
+aphaser
+#apulsator
+arealtime
+aresample sample_rate=48000
+#areverse
+#aselect ###Operation not permitted
+#asendcmd ###Invalid argument
+#asetnsamples
+#asetpts   ###not part of frame data
+asetrate r=48000
+#asettb
+#ashowinfo ###not part of frame data
+#asidedata ###Invalid argument
+#asplit ###Operation not permitted
+astats
+#astreamselect ###Operation not permitted
+atadenoise
+atempo
+atrim start=1:end=240:start_pts=1:end_pts=2:duration=1:start_sample=1:end_sample=2
+#avectorscope ###Input/output error
+avgblur
+bandpass
+bandreject
+bass channels=0x1
+bbox
+bench
+biquad
+blackdetect
+blackframe
+#blend ###Input/output error
+boxblur
+#buffer size=320x240:pixfmt=6:time_base=1/24:pixel_aspect=1/1 ###Invalid argument
+#buffersink ###Input/output error
+bwdif
+cellauto p=@:s=100x400:full=0:rule=18
+#channelmap 1|2|0|5|3|4:5.1 ###Invalid argument
+#channelsplit ###Operation not permitted
+chorus in_gain=0.400000:out_gain=0.400000:delays=1|1:decays=1|1:speeds=1|1:depths=1|1
+chromakey
+#codecview
+color
+colorbalance
+colorchannelmixer
+colorkey
+colorlevels
+colormatrix src=bt601:dst=bt709
+colorspace iall=smpte170m:all=bt709
+compand
+compensationdelay
+#concat ###Operation not permitted
+#convolution ###Invalid argument
+#copy ###not appropriate
+cover_rect
+crop
+cropdetect
+crystalizer
+curves
+datascope
+dcshift
+dctdnoiz 4.5
+deband
+#decimate
+deflate
+#deinterlace_vaapi ###Operation not permitted
+dejudder
+delogo x=10:y=10:w=10:h=10:show=1
+#denoise_vaapi ###Operation not permitted
+deshake
+#detelecine
+dilation
+#displace
+drawbox
+drawgraph
+drawgrid
+#dynaudnorm ###Invalid argument
+earwax
+#ebur128 ###Operation not permitted
+edgedetect
+elbg
+eq
+equalizer frequency=1000.000000:width_type=1:width=200.000000:gain=-10.000000
+erosion
+#extractplanes ###Operation not permitted
+extrastereo
+fade
+fftfilt
+field
+#fieldhint ###Invalid argument
+#fieldmatch ###Operation not permitted
+fieldorder
+#fifo   ###will not work within cin
+fillborders
+#find_rect ###Invalid argument
+#firequalizer delay=0.1:fixed=on:zero_phase=on
+flanger
+format pix_fmts=yuv420p|yuv444p|yuv410p
+#fps 30 ###not appropriate
+#framepack ###Input/output error
+framerate
+framestep step=30
+#freezedetect ###not appropriate
+fspp
+gblur
+#geq ###Invalid argument
+gradfun
+#haldclut ###not working due to need for multiple video streams ###Input/output error
+haldclutsrc
+#hdcd
+hflip
+highpass
+histeq
+histogram
+hqdn3d
+hqx
+#hstack ###Operation not permitted
+hue
+#hwdownload ###Operation not permitted
+#hwmap ###Input/output error
+#hwupload ###Operation not permitted
+#hwupload_cuda
+#hysteresis ###Input/output error
+idet
+il
+inflate
+#interlace  ###Operation not permitted, use tinterlace
+#interleave ###Operation not permitted
+#join
+kerndeint
+lenscorrection
+life ratio=2/3:s=200x200
+#loudnorm ###Invalid argument
+lowpass
+lut
+#lut2 ###Input/output error
+lut3d
+lutrgb
+lutyuv
+mandelbrot
+#maskedclamp ###Input/output error
+#maskedmerge ###Input/output error
+mcdeint
+#mergeplanes 0x03010200:yuva444p
+mestimate
+#metadata mode=add:file=/tmp/metadata.txt
+#midequalizer ###Input/output error
+minterpolate
+#movie ###Operation not permitted
+mpdecimate
+mptestsrc t=dc_luma
+negate
+nlmeans r=15:p=7:s=2
+#nnedi ###Invalid argument
+#noformat ###not part of frame data
+noise
+#null ###not appropriate
+#nullsink ###Input/output error
+#nullsrc
+#overlay x=main_w-overlay_w-10:y=main_h-overlay_h-10 ###Input/output error
+owdenoise
+pad
+#palettegen stats_mode=single ###Resource temporarily unavailable (single ok/need output file)
+#paletteuse ###Input/output error (requires input palette.png and output.gif files)
+pan 1c|c0=0.9*c0+0.1*c1
+perms
+perspective
+phase
+#pixdesctest ###not appropriate
+pp
+pp7
+#premultiply ###Operation not permitted
+prewitt
+#procamp_vaapi ###Operation not permitted
+#psnr PSNR=10*log10(MAX^2/MSE) ###Input/output error
+pullup
+#qp     ###Operation not permitted
+#random seed =-1 ###Resource temporarily unavailable
+readeia608
+readvitc
+realtime
+#remap ###Input/output error
+removegrain
+#removelogo ###Invalid argument
+repeatfields
+#replaygain
+#reverse ###Resource temporarily unavailable
+rgbtestsrc
+rotate
+sab
+scale 200:100
+#scale_cuda ###Operation not implemented when you try to use it
+#scale_vaapi ###Operation not permitted
+#scale2ref ###Input/output error
+#select ###Operation not permitted
+selectivecolor greens=.5 0 -.33 0:blues=0 .27
+#sendcmd ###Invalid argument
+separatefields
+#setdar   ###will not work because Format already set
+#setfield ###not part of frame data
+#setpts   ###not part of frame data
+#setsar   ###will not work because Format already set
+#settb ###not appropriate
+#sharpness_vaapi ###Operation not permitted
+#showcqt ###Input/output error
+#showfreqs ###Input/output error
+#showinfo ###not part of frame data
+showpalette s=30
+#showspatial
+#showspectrum s=1280x480:scale=log ###Input/output error
+#showspectrumpic ###Input/output error
+#showvolume r=30 ###Input/output error
+#showwaves ###Input/output error
+#showwavespic ###Input/output error
+shuffleframes
+shuffleplanes
+#sidechaincompress ###Input/output error
+#sidechaingate ###Input/output error
+#sidedata mode=add  ###Invalid argument
+signalstats
+#signature ###Operation not permitted
+#silencedetect n=0.001  ###does not appear to work
+silenceremove
+sine
+smartblur
+smptebars
+smptehdbars
+sobel
+#spectrumsynth ###Input/output error
+#split ###Operation not permitted
+spp
+#ssim ###Input/output error
+stereo3d
+stereotools
+stereowiden
+#streamselect ###Operation not permitted
+super2xsai
+swaprect
+swapuv
+tblend all_mode=grainextract
+#telecine
+testsrc duration=5.3:size=qcif:rate=10
+testsrc2 duration=5.3:size=qcif:rate=10
+#threshold ###Input/output error
+#thumbnail n=50
+#thumbnail_cuda
+tile layout=3x2:nb_frames=5:padding=7:margin=2
+tinterlace
+transpose
+treble
+tremolo
+#trim 5:15
+unsharp luma_msize_x=5:luma_msize_y=5:luma_amount=2.5
+uspp
+vaguedenoiser
+vectorscope
+vflip
+vibrato
+vignette
+volume
+volumedetect
+#vstack ###Operation not permitted
+w3fdif
+waveform
+weave
+xbr
+#xmedian
+yadif
+#yadif_cuda ###Operation not implemented when you try to use it
+yuvtestsrc
+zoompan
+; new in 3.4.1
+#acopy
+bitplanenoise
+ciescope
+crossfeed
+deflicker
+#derain
+despill
+doubleweave
+floodfill
+haas
+limiter
+loop
+lumakey
+oscilloscope
+pixscope
+pseudocolor
+roberts
+#superequalizer
+#surround
+tlut2
+tonemap
+#vmafmotion ###not appropriate
+; new in 4.0
+acontrast
+#afir ###Operation not permitted
+#convolve ###Input/output error
+#deconvolve ###Input/output error
+drmeter
+entropy
+fillborders
+#headphone
+hilbert
+mcompand
+#mix ###Operation not permitted
+normalize
+setrange
+#unpremultiply ###Operation not permitted
+vfrdet
+; new in 4.1
+acue
+#adeclick
+#adeclip
+aderivative
+#afftdn
+aintegral
+amplify
+chromahold
+#cue    ###freeze
+deblock
+fttdnoiz
+graphmonitor
+greyedge
+#highshelf
+#lowshelf
+lut1d
+pal75bars
+pal100bars
+setparams
+#sinc   ###freeze
+tmix
+vibrance
+; broken in 4.1
+#acrossover ###Operation not permitted
+#aiir ###Operation not permitted
+#amultiply ###Input/output error
+#bm3d sigma=3:block=4:bstep=2:group=1:estim=basic ###Operation not permitted
+#sr ###Input/output error
+#xstack ###Operation not permitted
+#agraphmonitor ###Input/output error
+; new in 4.2
+deesser
+; broken in 4.3
+#anlms ###Input/output error
+#axcorrelate ###Input/output error
+#freezeframes ###Input/output error
+#maskedmax ###Input/output error
+#maskedmin ###Input/output error
+#maskedthreshold ###Input/output error
+#overlay_cuda ###Input/output error
+#xfade ###Input/output error
+#arnndn ###Invalid argument
+#dnn_processing ###Invalid argument
+#tonemap_vaapi ###Operation not permitted
+#afirsrc ###Operation not permitted
+#; the ffmpeg system library on Arch has these errors:
+#ladspa
+#ass
+#drawtext
+#subtitles
+; new in 4.4
+chromanr
+afreqshift
+aphaseshift
+adenorm
+asupercut
+asubcut
+asuperpass
+asuperstop
+shufflepixels
+tmidequalizer
+estdif
+epx
+shear
+kirsch
+colortemperature
+colorcontrast
+colorcorrect
+colorize
+aexciter
+exposure
+monochrome
+; broken in 4.4
+#speechnorm
+#bitstream
+#identity ###Input/output error
+#msad ###Input/output error
+#setts
+#vif ###Input/output error

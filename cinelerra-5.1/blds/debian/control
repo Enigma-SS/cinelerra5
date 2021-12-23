@@ -1,0 +1,21 @@
+Source: cin
+Section: video
+Priority: optional
+Standards-Version: 5.1.20201031
+Maintainer: mailing list <cin@lists.cinelerra-gg.org>
+Homepage: https://www.cinelerra-gg.org/
+Build-Depends:
+ autoconf, automake, build-essential, cmake, e2fsprogs,
+ exuberant-ctags, fonts-dejavu, freeglut3-dev, g++, gdb,
+ gettext, git, inkscape, libasound2-dev, libbz2-dev,
+ libflac-dev, libfreetype6-dev, liblzma-dev, libncurses5-dev,
+ libpng-dev, libtool, libusb-1.0-0-dev, libva-dev, libvdpau-dev,
+ libxft-dev, libxinerama-dev, libxml2-utils, libxv-dev,
+ libz-dev, linux-firmware, nasm, texinfo, ttf-bitstream-vera,
+ udftools, xfonts-100dpi, xfonts-75dpi, yasm, libpulse-dev
+
+Package: cin
+Depends: ${misc:Depends} ${shlibs:Depends}
+Description: Multimedia editing and construction
+Architecture: any
+

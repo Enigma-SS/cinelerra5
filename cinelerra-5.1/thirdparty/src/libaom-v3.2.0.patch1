@@ -1,0 +1,21 @@
+--- libaom-v3.0.0/aom_ports/arm_cpudetect.c	2020-07-10 02:32:42.000000000 +0300
++++ libaom-v3.0.0_1/aom_ports/arm_cpudetect.c	2021-05-08 05:18:23.404156362 +0300
+@@ -87,7 +87,7 @@
+   return flags & mask;
+ }
+
+-#elif defined(__ANDROID__) /* end _MSC_VER */
++#elif (defined(__ANDROID__) && !defined(__TERMUX__))/* end _MSC_VER */
+ #include <cpu-features.h>
+
+ int aom_arm_cpu_caps(void) {
+@@ -106,8 +106,7 @@
+   return flags & mask;
+ }
+
+-#elif defined(__linux__) /* end __ANDROID__ */
+-
++#elif defined(__LINUX__) || defined(__TERMUX__)/* end __ANDROID__ */
+ #include <stdio.h>
+
+ int aom_arm_cpu_caps(void) {

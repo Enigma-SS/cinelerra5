@@ -1,0 +1,9 @@
+mpeg mpeg2video
+sc_threshold=-30000
+dc=11
+bf=2
+trellis=2
+mbd=rd
+cmp=2 
+subcmp=2
+b=4000000

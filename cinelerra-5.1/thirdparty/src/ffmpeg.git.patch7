@@ -1,0 +1,13 @@
+diff --git a/libavcodec/h263dec.c b/libavcodec/h263dec.c
+index 3b29a189e9..681a4187c5 100644
+--- a/libavcodec/h263dec.c
++++ b/libavcodec/h263dec.c
+@@ -684,7 +684,7 @@ frame_end:
+     if (CONFIG_MPEG4_DECODER && avctx->codec_id == AV_CODEC_ID_MPEG4)
+         ff_mpeg4_frame_end(avctx, buf, buf_size);
+ 
+-    if (!s->divx_packed && avctx->hwaccel)
++    if (s->divx_packed && avctx->hwaccel)
+         ff_thread_finish_setup(avctx);
+ 
+     av_assert1(s->current_picture.f->pict_type == s->current_picture_ptr->f->pict_type);

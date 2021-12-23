@@ -1,0 +1,5 @@
+wav pcm_s24le
+# PCM (pcm_s24le) in RIFF WAVE.
+# ffmpeg --help muxer=wav
+# Use RF64 header rather than RIFF for large files:
+rf64 1

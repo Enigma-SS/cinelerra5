@@ -1,0 +1,6 @@
+mpeg mpeg2video
+trellis=2
+mbd=rd
+cmp=2 
+subcmp=2
+b=4000000

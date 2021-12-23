@@ -1,0 +1,39 @@
+#ifndef __MIXERSALIGN_INC__
+#define __MIXERSALIGN_INC__
+
+class MixersAlignMixer;
+class MixersAlignMixers;
+class MixersAlignMixerList;
+class MixersAlignMTrack;
+class MixersAlignMTracks;
+class MixersAlignMTrackList;
+class MixersAlignATrack;
+class MixersAlignATracks;
+class MixersAlignATrackList;
+class MixersAlignReset;
+class MixersAlignThread;
+class MixersAlignMatch;
+class MixersAlignMatchAll;
+class MixersAlignNudgeTracks;
+class MixersAlignNudgeSelected;
+class MixersAlignCheckPoint;
+class MixersAlignUndoEDLs;
+class MixersAlignUndoItem;
+class MixersAlignUndo;
+class MixersAlignWindow;
+class MixersAlignARender;
+class MixersAlignScanPackage;
+class MixersAlignScanClient;
+class MixersAlignScanFarm;
+class MixersAlignMatchFwdPackage;
+class MixersAlignMatchFwdClient;
+class MixersAlignMatchFwdFarm;
+class MixersAlignMatchRevPackage;
+class MixersAlignMatchRevClient;
+class MixersAlignMatchRevFarm;
+class MixersAlignTargetPackage;
+class MixersAlignTargetClient;
+class MixersAlignTarget;
+class MixersAlign;
+
+#endif

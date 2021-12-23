@@ -1,0 +1,9 @@
+--- /dev/null	2021-05-22 06:52:04.572000000 +0300
++++ libbthread-master/Makefile	2021-05-23 15:06:41.348461769 +0300
+@@ -0,0 +1,6 @@
++all:
++	mv pt-test.c pt-test
++	cat `ls *.c` > just-pt.c
++	g++ -c -o jpt.o just-pt.c -I.
++	ar crs jpt.a jpt.o
++

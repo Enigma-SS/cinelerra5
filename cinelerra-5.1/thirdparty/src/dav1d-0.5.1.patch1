@@ -1,0 +1,367 @@
+diff -urN a/Makefile b/Makefile
+--- a/Makefile	1969-12-31 17:00:00.000000000 -0700
++++ b/Makefile	2019-10-14 10:54:47.354841430 -0600
+@@ -0,0 +1,363 @@
++
++_ARCH := $(shell uname -m)
++ARCH_I32 := $(shell expr "x$(_ARCH)" : 'xi[346]86.*')
++ARCH_X64 := $(shell expr "x$(_ARCH)" : 'x..._64*')
++
++ifneq ($(ARCH_I32),0)
++ASM_ARCH := elf32
++ARCH_X86_32 := 1
++ARCH_X86_64 := 0
++endif
++ifneq ($(ARCH_X64),0)
++ASM_ARCH := elf64
++ARCH_X86_32 := 0
++ARCH_X86_64 := 1
++endif
++
++BUILD=build
++DESTDIR=/
++PREFIX=usr/local
++LIBDIR=$(PREFIX)/lib
++INCDIR=$(PREFIX)/include
++# make Q="" for verbose
++Q?=@echo == $@; 
++OBJDIR?=$(BUILD)/static
++NASM_BLD=$(OBJDIR)/nasm
++ENTRY_BLD=$(OBJDIR)/entry
++SRC_BLD=$(OBJDIR)/src
++BIT8_BLD=$(OBJDIR)/bits8
++BIT16_BLD=$(OBJDIR)/bits16
++TOOLS_BLD=$(BUILD)/tools
++TESTS_BLD=$(BUILD)/tests
++
++STATIC_LIB=$(BUILD)/src/libdav1d.a
++SHARED_LIB=$(BUILD)/src/libdav1d.so
++DEFS= -DNDEBUG -D_FILE_OFFSET_BITS=64 -D_POSIX_C_SOURCE=200112L
++FUZZ= -DDAV1D_MT_FUZZING
++
++BLD_INCL= $(DEFS) -I. -Isrc -Iinclude/dav1d -Iinclude \
++	-I$(BUILD) -I$(BUILD)/include -I$(BUILD)/include/dav1d
++TOOLS_INCL= $(DEFS) -Itools -I. -I$(BUILD) -I$(BUILD)/tools \
++	-Iinclude -Iinclude/dav1d -I$(BUILD)/include/dav1d \
++	-I$(BUILD)/include -I/usr/include/SDL2
++
++NP?=.NOTPARALLEL:
++$(NP)
++MAKE_P:=$(MAKE) -j NP=""
++
++all: meson_data
++	$(MAKE_P) $(STATIC_LIB) OBJDIR=$(BUILD)/static
++	$(MAKE_P) $(SHARED_LIB) OBJDIR=$(BUILD)/shared
++# req SDL
++#	$(MAKE_P) $(TOOLS) OBJDIR=$(BUILD)/static
++#	$(MAKE_P) $(TESTS) OBJDIR=$(BUILD)/static
++
++CC_DEFS=\
++	-DNDEBUG \
++	-D_FILE_OFFSET_BITS=64 \
++	-D_POSIX_C_SOURCE=200112L \
++
++CC_OPTS=\
++	-pipe \
++	-Wall \
++	-Winvalid-pch \
++	-Wextra \
++	-std=c99 \
++	-O3 \
++	-fvisibility=hidden \
++	-Wundef \
++	-Werror=vla \
++	-Wno-maybe-uninitialized \
++	-Wno-missing-field-initializers \
++	-Wno-unused-parameter \
++	-Werror=missing-prototypes \
++	-fomit-frame-pointer \
++	-ffast-math \
++	-fPIC \
++	-mpreferred-stack-boundary=5 \
++	-MD -MQ $@ -MF $@.d \
++
++SHA_OPTS=\
++	-Wl,--no-undefined \
++	-Wl,--as-needed \
++	-Wl,-O1 \
++	-shared \
++	-fPIC \
++	-Wl,--start-group \
++	-Wl,-soname,libdav1d.so.2 \
++	-Wl,--end-group \
++	-pthread \
++
++CC_CC=$(Q)cc $(CC_OPTS) $(CFLAGS)
++NASM=$(Q)/usr/bin/nasm
++any=$(foreach i,$(2),$(1)/$(i))
++
++# nasm
++NASM_OBJS=$(call any,$(NASM_BLD), \
++	cdef.obj \
++	film_grain.obj \
++	ipred.obj \
++	itx.obj \
++	cdef_sse.obj \
++	ipred_ssse3.obj \
++	loopfilter.obj \
++	looprestoration.obj \
++	mc.obj \
++	itx_ssse3.obj \
++	looprestoration_ssse3.obj \
++	loopfilter_ssse3.obj \
++	mc_ssse3.obj \
++	cpuid.obj \
++	msac.obj )
++
++$(NASM_BLD)/%.obj: src/x86/%.asm
++	$(NASM) -f $(ASM_ARCH) \
++		-I src/ -I $(BUILD)/ -MQ $@ -MF $@.ndep \
++		$< -o $@
++
++# entry
++ENTRY_OBJS=$(call any,$(ENTRY_BLD), \
++	lib.c.o \
++	thread_task.c.o)
++$(ENTRY_BLD)/%.c.o: src/%.c
++	$(CC_CC) -Iinclude -Ibuild/include/dav1d -Isrc/entry $(BLD_INCL) \
++		-mincoming-stack-boundary=4 -o $@ -c $<
++
++# src
++SRC_OBJS=$(call any,$(SRC_BLD), \
++	cdf.o \
++	cpu.o \
++	data.o \
++	decode.o \
++	dequant_tables.o \
++	getbits.o \
++	intra_edge.o \
++	lf_mask.o \
++	log.o \
++	msac.o \
++	obu.o \
++	picture.o \
++	qm.o \
++	ref.o \
++	ref_mvs.o \
++	scan.o \
++	tables.o \
++	warpmv.o \
++	wedge.o \
++	x86/cpu.c.o)
++$(SRC_BLD)/%.o: src/%.c
++	$(CC_CC) $(BLD_INCL) -pthread -o $@ -c $<
++$(SRC_BLD)/x86/%.c.o: src/x86/%.c
++	$(CC_CC) $(BLD_INCL) -o $@ -c $<
++
++# bits
++BITS_OBJS= \
++	cdef_tmpl.o \
++	cdef_apply_tmpl.o \
++	fg_apply_tmpl.o \
++	film_grain_tmpl.o \
++	ipred_tmpl.o \
++	ipred_prepare_tmpl.o \
++	itx_tmpl.o \
++	lf_apply_tmpl.o \
++	loopfilter_tmpl.o \
++	looprestoration_tmpl.o \
++	lr_apply_tmpl.o \
++	mc_tmpl.o \
++	recon_tmpl.o \
++	x86/cdef_init_tmpl.c.o \
++	x86/film_grain_init_tmpl.c.o \
++	x86/ipred_init_tmpl.c.o \
++	x86/itx_init_tmpl.c.o \
++	x86/loopfilter_init_tmpl.c.o \
++	x86/looprestoration_init_tmpl.c.o \
++	x86/mc_init_tmpl.c.o \
++
++BIT8_OBJS=$(call any,$(BIT8_BLD),$(BITS_OBJS))
++$(BIT8_BLD)/x86/%.c.o: src/x86/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=8 -o $@ -c $<
++$(BIT8_BLD)/%.o: src/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=8 -o $@ -c $<
++
++BIT16_OBJS=$(call any,$(BIT16_BLD),$(BITS_OBJS))
++$(BIT16_BLD)/x86/%.c.o: src/x86/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=16 -o $@ -c $<
++$(BIT16_BLD)/%.o: src/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=16 -o $@ -c $<
++
++$(BUILD)/config.h:
++	echo  > $@ "#pragma once"
++	echo >> $@ "#define ARCH_AARCH64 0"
++	echo >> $@ "#define ARCH_ARM 0"
++	echo >> $@ "#define ARCH_PPC64LE 0"
++	echo >> $@ "#define ARCH_X86 1"
++	echo >> $@ "#define ARCH_X86_32 $(ARCH_X86_32)"
++	echo >> $@ "#define ARCH_X86_64 $(ARCH_X86_64)"
++	echo >> $@ "#define CONFIG_16BPC 1"
++	echo >> $@ "#define CONFIG_8BPC 1"
++	echo >> $@ "#define CONFIG_LOG 1"
++	echo >> $@ "#define ENDIANNESS_BIG 0"
++	echo >> $@ "#define HAVE_ASM 1"
++	echo >> $@ "#define HAVE_POSIX_MEMALIGN 1"
++	echo >> $@ "#define HAVE_UNISTD_H 1"
++	echo >> $@ "#define STACK_ALIGNMENT 32"
++
++$(BUILD)/config.asm:
++	echo  > $@ "%define ARCH_X86_32 $(ARCH_X86_32)"
++	echo >> $@ "%define ARCH_X86_64 $(ARCH_X86_64)"
++	echo >> $@ "%define PIC 1"
++	echo >> $@ "%define STACK_ALIGNMENT 32"
++
++$(BUILD)/include/vcs_version.h:
++	mkdir -p $(BUILD)/include
++	echo  > $@ "#define DAV1D_VERSION \"0.5.0\""
++
++$(BUILD)/include/dav1d/version.h:
++	mkdir -p $(BUILD)/include/dav1d
++	echo  > $@ "#ifndef DAV1D_VERSION_H"
++	echo >> $@ "#define DAV1D_VERSION_H"
++	echo >> $@ "#define DAV1D_API_VERSION_MAJOR 2"
++	echo >> $@ "#define DAV1D_API_VERSION_MINOR 0"
++	echo >> $@ "#define DAV1D_API_VERSION_PATCH 0"
++	echo >> $@ "#endif /* DAV1D_VERSION_H */"
++
++$(TOOLS_BLD)/cli_config.h:
++	mkdir -p $(TOOLS_BLD)
++	echo  > $@ "#pragma once"
++	echo >> $@ "#define HAVE_CLOCK_GETTIME 1"
++
++.PHONY: meson_data
++meson_data:
++	make meson_dirs OBJDIR=$(BUILD)/static
++	make meson_dirs OBJDIR=$(BUILD)/shared
++	ln -sf ./include/compat/gcc/stdatomic.h .
++
++.PHONY: meson_dirs
++meson_dirs: $(OBJDIR) \
++	$(BUILD)/config.h $(BUILD)/config.asm \
++	$(BUILD)/include/vcs_version.h \
++	$(BUILD)/include/dav1d/version.h \
++	$(TOOLS_BLD)/cli_config.h \
++
++LIB_OBJS=$(ENTRY_OBJS) $(NASM_OBJS) $(SRC_OBJS) $(BIT8_OBJS) $(BIT16_OBJS)
++
++$(STATIC_LIB): DIR?=static
++$(STATIC_LIB): $(LIB_OBJS)
++	rm -f $@
++	gcc-ar csrD $@ $(LIB_OBJS)
++
++$(SHARED_LIB): DIR?=shared
++$(SHARED_LIB): $(LIB_OBJS)
++	rm -f $@
++	cc -o $@ $(LIB_OBJS) $(SHA_OPTS)
++
++# tools
++DAV1D_OBJS=$(call any,$(TOOLS_BLD),\
++	dav1d.o \
++	dav1d_cli_parse.o \
++	input/annexb.o \
++	input/ivf.o \
++	input/input.o \
++	output/md5.o \
++	output/null.o \
++	output/output.o \
++	output/y4m2.o \
++	output/yuv.o)
++
++DAV1DPLAY_OBJS=$(call any,$(TOOLS_BLD),\
++	dav1dplay.o \
++	input/annexb.o \
++	input/ivf.o \
++	input/input.o)
++
++$(TOOLS_BLD)/%.o: tools/%.c
++	$(CC_CC) $(TOOLS_INCL) -o $@ -c $<
++
++DAV1D=$(TOOLS_BLD)/dav1d
++$(DAV1D): $(DAV1D_OBJS)
++	$(CC_CC) -pthread -I$(BUILD) -o $@ $(DAV1D_OBJS) $(STATIC_LIB)
++
++DAV1DPLAY=$(TOOLS_BLD)/dav1dplay
++$(DAV1DPLAY): $(DAV1DPLAY_OBJS)
++	$(CC_CC) -pthread -o $(TOOLS_BLD)/dav1dplay $(DAV1DPLAY_OBJS) $(STATIC_LIB) -lSDL2
++
++TOOLS=$(DAV1D) $(DAV1DPLAY)
++.PHONY:	tools
++tools:	$(TOOLS)
++
++# tests
++TESTS_CHKASM=tests/checkasm
++TESTS_CHKASM_BLD=$(TESTS_BLD)/checkasm
++CHKASM_BIT8=$(TESTS_CHKASM_BLD)/bit8
++CHKASM_BIT16=$(TESTS_CHKASM_BLD)/bit16
++CHKASM_BITS= \
++	cdef.o \
++	ipred.o \
++	itx.o \
++	loopfilter.o \
++	looprestoration.o \
++	mc.o \
++
++CHKASM_BIT8_OBJS=$(call any,$(CHKASM_BIT8),$(CHKASM_BITS))
++CHKASM_BIT16_OBJS=$(call any,$(CHKASM_BIT16),$(CHKASM_BITS))
++
++TESTS_CHKASM_OBJS= \
++	$(TESTS_CHKASM_BLD)/checkasm.o \
++	$(TESTS_CHKASM_BLD)/msac.o \
++	$(CHKASM_BIT8_OBJS) $(CHKASM_BIT16_OBJS) \
++	$(TESTS_CHKASM_BLD)/x86/checkasm.obj \
++
++$(TESTS_CHKASM_BLD)/%.o: $(TESTS_CHKASM)/%.c
++	$(CC_CC) $(BLD_INCL) -o $@ -c $<
++$(CHKASM_BIT8)/%.o: $(TESTS_CHKASM)/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=8 -o $@ -c $<
++$(CHKASM_BIT16)/%.o: $(TESTS_CHKASM)/%.c
++	$(CC_CC) $(BLD_INCL) -DBITDEPTH=16 -o $@ -c $<
++$(TESTS_CHKASM_BLD)/x86/%.obj: $(TESTS_CHKASM)/x86/%.asm
++	@$(NASM) -f $(ASM_ARCH) \
++		-I src/ -I $(BUILD)/ -MQ $@ -MF $@.ndep \
++		$< -o $@
++
++CHECKASM=$(TESTS_BLD)/checkasm/checkasm
++$(CHECKASM): $(TESTS_CHKASM_OBJS) $(STATIC_LIB)
++	$(CC_CC) -pthread -o $@ $(TESTS_CHKASM_OBJS) $(STATIC_LIB) -lm
++
++TESTS_FUZZER=tests/libfuzzer
++TESTS_FUZZER_BLD=$(TESTS_BLD)/libfuzzer
++TESTS_FUZZER_OBJS= \
++	$(TESTS_FUZZER_BLD)/main.o \
++	$(TESTS_FUZZER_BLD)/dav1d_fuzzer.o \
++
++$(TESTS_FUZZER_BLD)/%.o: $(TESTS_FUZZER)/%.c
++	$(CC_CC) $(BLD_INCL) -o $@ -c $<
++
++DAV1D_FUZZER=$(TESTS_BLD)/dav1d_fuzzer
++$(DAV1D_FUZZER): $(TESTS_FUZZER_OBJS) $(STATIC_LIB)
++	$(CC_CC) -pthread -o $@ $(TESTS_FUZZER_OBJS) $(STATIC_LIB)
++
++TESTS=$(CHECKASM) $(DAV1D_FUZZER)
++.PHONY:	tests
++tests:	$(TESTS)
++
++$(OBJDIR):
++	mkdir -p $@/include/dav1d \
++		$(BUILD)/src $(BUILD)/include \
++		$(ENTRY_BLD) $(NASM_BLD) \
++		$(SRC_BLD)/x86 $(BIT8_BLD)/x86 $(BIT16_BLD)/x86 \
++		$(TOOLS_BLD) $(TOOLS_BLD)/input $(TOOLS_BLD)/output \
++		$(TESTS_CHKASM_BLD)/bit8 $(TESTS_CHKASM_BLD)/bit16 \
++		$(TESTS_CHKASM_BLD)/x86 $(TESTS_FUZZER_BLD) \
++
++clean:
++	rm -rf $(BUILD)
++
++install:
++	mkdir -p $(DESTDIR)$(LIBDIR)
++	cp -a $(STATIC_LIB) $(DESTDIR)$(LIBDIR)
++	cp -a $(SHARED_LIB) $(DESTDIR)$(LIBDIR)
++	mkdir -p $(DESTDIR)$(INCDIR)
++	cp -a include/dav1d $(DESTDIR)$(INCDIR)
++	rm -f $(DESTDIR)$(INCDIR)/dav1d/meson.build
++	rm -f $(DESTDIR)$(INCDIR)/dav1d/version.h.in
++	cp -a $(BUILD)/include/dav1d/version.h $(DESTDIR)$(INCDIR)/version.h
++

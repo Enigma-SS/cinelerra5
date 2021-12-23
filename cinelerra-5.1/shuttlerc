@@ -1,0 +1,146 @@
+
+# uncomment to enable diagnostics
+#DEBUG
+# recommend uncommenting USB_DIRECT for full functionality
+#USB_DIRECT
+
+# redefine default, use
+# also used for resources,load windows
+[Default]
+[Resources]
+[Load]
+ K5 XK_Home
+ K6 XK_Button_1
+ K7 XK_Button_2
+ K8 XK_Button_3
+ K9 XK_End
+ JL XK_Scroll_Up
+ JR XK_Scroll_Down
+
+[Cinelerra]
+
+# Most useful functions have to be on K5-K9 because Xpress only has 5 keys
+ K5 XK_Home  	# Beginning
+ K6 XK_KP_6	# Reverse, or if playing Stop
+ K7 XK_KP_0	# Stop
+ K8 XK_KP_3	# Play, or if playing Stop
+ K9 XK_End   	# End
+
+ K10 Alt-XK_Left  # Go to previous edit
+ K11 Alt-XK_Right # Go to next edit
+ K12 Ctrl-XK_Left  # Go to previous label
+ K13 Ctrl-XK_Right # Go to next label
+ K14 "["        # Toggle in
+ K15 "]"        # Toggle out
+
+ K1 "l"		# Label
+ K2 XK_Button_1
+ K3 XK_Button_3
+ K4 "i"		# Clip
+
+ S-7 REV_16	# Next 6 are reverse keys
+ S-6 REV_8	#  the number on the end represents speed
+ S-5 REV_4	#  number can be decimal up to 64
+ S-4 REV_2	#  2 means 2x or double speed
+ S-3 REV_1
+ S-2 REV_0.5	#  note 0.5 represents 1/2 speed
+#S-1 REV_0.25	# if using usb_direct
+ S-1 XK_KP_0
+ S0  XK_KP_0	# hid_generic kernel driver does not generate s0
+ S1  XK_KP_0
+#S1  FWD_0.25	# if using usb_direct
+ S2  FWD_0.5	# Next 6 are forward keys
+ S3  FWD_1
+ S4  FWD_2
+ S5  FWD_4
+ S6  FWD_8
+ S7  FWD_16
+
+ JL XK_KP_4     # Frame reverse
+ JR XK_KP_1     # Frame forward
+
+[Composer]
+
+# Most useful functions have to be on K5-K9 because Xpress only has 5 keys
+ K5 XK_Home  	# Beginning
+ K6 XK_KP_6	# Reverse, or if playing Stop
+ K7 "f"		# Go in or out of Fullscreen mode
+ K8 XK_KP_3	# Play, of if playing Stop
+ K9 XK_End   	# End
+
+ K10 Alt-XK_Left  # Go to previous edit
+ K11 Alt-XK_Right # Go to next edit
+ K12 Ctrl-XK_Left  # Go to previous label
+ K13 Ctrl-XK_Right # Go to next label
+ K14 "["        # Toggle in
+ K15 "]"        # Toggle out
+
+ K1 "l"		# Label
+ K2 XK_Button_1
+ K3 XK_Button_3
+ K4 "i"		# Clip
+
+ S-7 REV_16
+ S-6 REV_8
+ S-5 REV_4
+ S-4 REV_2
+ S-3 REV_1
+ S-2 REV_0.5
+#S-1 REV_0.25	# if using usb_direct
+ S-1 XK_KP_0
+ S0  XK_KP_0	# hid_generic kernel driver does not generate s0
+ S1  XK_KP_0
+#S1  FWD_0.25	# if using usb_direct
+ S2  FWD_0.5
+ S3  FWD_1
+ S4  FWD_2
+ S5  FWD_4
+ S6  FWD_8
+ S7  FWD_16
+
+ JL XK_KP_4     # Frame reverse
+ JR XK_KP_1     # Frame forward
+
+[Viewer]
+
+# Most useful functions have to be on K6-K9 because Xpress only has 5 keys
+ K5 XK_Home  	# Beginning
+ K6 XK_KP_6	# Reverse, or if playing Stop
+ K7 "f"		# Go in or out of Fullscreen mode
+ K8 XK_KP_3	# Play, or if playing Stop
+ K9 XK_End   	# End
+
+ K10 XK_Button_1
+ K11 XK_Button_3
+
+ K12 Ctrl-XK_Left  # Go to previous label
+ K13 Ctrl-XK_Right # Go to next label
+ K14 "["        # Toggle in
+ K15 "]"        # Toggle out
+
+ K1 "l"		# Label
+ K2 XK_Button_1
+ K3 XK_Button_3
+ K4 "i"		# Clip
+
+ S-7 REV_16
+ S-6 REV_8
+ S-5 REV_4
+ S-4 REV_2
+ S-3 REV_1
+ S-2 REV_0.5
+#S-1 REV_0.25	# if using usb_direct
+ S-1 XK_KP_0
+ S0  XK_KP_0	# hid_generic kernel driver does not generate s0
+ S1  XK_KP_0
+#S1  FWD_0.25	# if using usb_direct
+ S2  FWD_0.5
+ S3  FWD_1
+ S4  FWD_2
+ S5  FWD_4
+ S6  FWD_8
+ S7  FWD_16
+
+ JL XK_KP_4     # Frame reverse
+ JR XK_KP_1     # Frame forward
+

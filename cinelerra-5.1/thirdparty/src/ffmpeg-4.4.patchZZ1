@@ -1,0 +1,12 @@
+diff --git a/libavformat/avidec.c b/libavformat/avidec.c
+index 5cf67a4771..5bd2372c27 100644
+--- a/libavformat/avidec.c
++++ b/libavformat/avidec.c
+@@ -1942,6 +1942,7 @@ AVInputFormat ff_avi_demuxer = {
+     .long_name      = NULL_IF_CONFIG_SMALL("AVI (Audio Video Interleaved)"),
+     .priv_data_size = sizeof(AVIContext),
+     .extensions     = "avi",
++    .flags          = AVFMT_SEEK_NOSTREAMS,
+     .read_probe     = avi_probe,
+     .read_header    = avi_read_header,
+     .read_packet    = avi_read_packet,

@@ -1,0 +1,174 @@
+Email cin@lists.cinelerra-gg.org 4 help.
+For usage help, refer to the following:
+  https://cinelerra-gg.org/download/CinelerraGG_Manual.pdf
+  http://g-raffa.eu/Cinelerra/HOWTO/basics.html
+.
+2021 November changes of note:
+  Libaom has been updated to v3.2.0 and may be faster.
+  Procedure to build for Android tablet/phone using Termux
+   is available and documented with additional tweaks.
+2021 October changes of note:
+  Hungarian automated-google translation has been added.
+  Long existing bug when using Fade in/out in the Titler 
+   plugin when there is an alpha channel in use is fixed.
+  Added new render formats of Cineform, DPX, and mxf.
+  In AppImage, the plugins are no longer loaded every time.
+2021 September New Features of note:
+  Improvements have been made to the LV2 plugin code that
+   makes it more robust and prevents crashes on startup.
+  Additional 9 Video icons in the Resources window added.
+.
+2021 August New Features of note:
+  FFmpeg has been upgraded to 4.4 to include new plugins.
+  Speed PerCent plugin for easily changing video speed
+   is now available.
+  FAST_SPEED and SLOW_SPEED variables to personalize your
+   playback speed have been added.
+.
+2021 July New Features of note:
+  Libraries x264, x265, and libaom have been upgraded.
+  YUV Colorspace 601 and 2020 have been split into more
+   available options of 601 NTSC/PAL and 2020 NCL/CL.
+.
+2021 June New Features of note:
+  High fps rendering formats added for over 60 fps.
+  Upgrade of libjpeg-turbo to 2.1.0.
+  Additional mxf + other rendering formats added.
+.
+2021 May New Features of note:
+  Context Help has been added using hotkey Alt/h by Georgy.  The
+   help page will come up in your web browser tab for the item 
+   most relevant to where you used Alt/h on a menu, plugin, button,
+   icon, transition, window, or tooltip.  For additional information:
+   /https://cinelerra-gg.org/download/CinelerraGG_Manual/Troubleshooting_Help.html
+.
+2021 March New Features of note:
+  AppImage is the method of distributing new releases;
+   Newer distros use: CinGG-20210331-x86_64.AppImage 
+   Older distros use: CinGG-20210331-x86_64-older_distros.AppImage
+  There are 2 new plugins: Posterize and Timelapse Helper.
+.
+2021 1st Quarter New Features of note:
+  The manual can now be used in HTML format besides PDF.
+  Autosave backups optional feature in Preferences.
+  Additional FFmpeg video/audio render formats available.
+  Aspect ratio and Interlace improvements are in.
+  Batch Render menu now has hidden feature to prevent mistakes.
+  Openjpeg upgraded from 2.3.1 to 2.4.0.
+.
+2020 New Features of note:
+  Drag select and deselect edits was added on the timeline.
+  Tile mixers allows for designating a rectangular area.
+  Motion plugin improvements by SGE for better results.
+  Faster transition playing with cache + drag capable.
+  Bump Autos new feature; especially useful for speed.
+  Language preference now in Settings->Preferences.
+  Added drag speed highlighting for easier usage of auto.
+  Option and shortcut to select multiple edits.
+  Align Timecodes for various timecodes/stamps is available.
+  Subtitles can be generated in either SRT, SUB, or uDVD form.
+  Mix masters make it easy to use multicam mode on timeline.
+  Ganging modes added for DAW-like editing of channels.
+  Rotate plugin has been modernized and improved.
+  Audio track height button added, separate from video height.
+  New patchbay toggle to vary individual vertical track height.
+  Potential Performance improvements added.
+  New way of creating and using a stack of Effects.
+  Additional ShapeWipe transitions are now available.
+  BoxBlur plugin allows forjust blurring an area.
+  Videoscope is now on the Compositor and Viewer.
+  Several new Shape Wipe transitions are included.
+  New ColorSpace plugin to convert color space/range.
+  Updated 17 thirdparty libraries to keep up to date.
+  Rewrote and replaced OGG/Theora/Vorbis file codec.
+  PulseAudio option is now built in as audio choice.
+  Updated reference Manual using LaTeX now complete.
+  File by Reference capability now available.
+.
+2019 New Features of note:
+  Edit EDLs feature added for easily editing nested EDLs.
+  OTA TV support for Happauge 1657 Dual USB device recording.
+  Audio improvements added for playback/speed/sampling.
+  Spanish, Russian, French, and German translations updated.
+  Transcode 1:1 added to convert to a different format.
+  Compositor zoom using the wheel & panning is available.
+  Scaling for any size monitor now available in Preferences.
+  Improved and new transitions and plugins to include:
+    Tracer, Crop & Position, Compressor Multi, Alpha, Foreground.
+  Libraries updated for FFmpeg, libvpx, x264, x265, and Dav1d.
+  Major improvements for Masking in the Compositor.
+  Camera and Projector menu and usage improvements added.
+  Hardware acceleration capabilities added to include:
+    nvenc for nvidia boards, vdapu and vaapi hardware, + cuda.
+  Additional options for Preview mode in Resources window.
+  Named layouts for easier identification purposes.
+  Capability for ShuttlePro/Xpress usage has been added.
+  Insert Mixers for multiple cameras general improvements added.
+.
+2018 New Features of note:
+  Inter-View mode / Identifying Source Targets added.
+  Cut and Paste behavior added; right mouse button on clip.
+  Grouping and ungrouping possibilities in Arrow mode,
+  Color titles and media with changable colors and alpha.
+  Change thumbnail size, vicon memory usage and color mode.
+  Preview window zoom scale for vicons in Resources window.
+  Sketcher plugin newly added to "pencil in" lines/curves.
+  Window layout save and load feature added - total of 4.
+  Title plugin has unlimited number of characters allowed.
+  Histogram Bezier bug fixes and some improvements applied.
+  Trim Feature enhancement with drag handle and split look.
+  Dynamic keyframes implemented so can use large numbers.
+  Color correction+others highlighted with expand subtrees.
+  Motion plugins now have more visible stippled lines.
+  Neophyte theme and German translations compliments of Olaf.
+  Bins/Folders added for organizing media.
+  Preview capability with Mouse Over and vicon tweaks.
+  Find in Resources, User title, and Show edit options added.
+  Added Display packed icons and Display icon list in Resources.
+  LV2 Audio plugins have been hooked in to include Calf, X42, +.
+  Unbundled build scripts are now available and tested a few.
+  OpenCV FindObj updated and StyleObj, PuzzleObj added.
+  Perpetual Session preference and 1 extra backup.
+  Speed automation will now update the track duration.
+  Can now Paste Silence a single frame at hairline cursor.
+  Audio waveform partial image will show in the Viewer.
+  Loop play added in Viewer and Compositor.
+  Mouse play action implemented in Viewer/Compositor.
+  Nested EDLs are now available and automatically render.
+  Raw Video (yuv/rgb) and raw audio available.
+  Audio waveform icons, color coded, in Resources Media.
+  Allowance for piped file usage has been added.
+  2 Pass option for VP9/webm added.
+.
+2017 New Features of note:
+  Many plugin icons and other new icons modernized by Sam.
+  Mixer Viewer for multiple media/cameras was added.
+  Blade cut and hard edges are now available.
+  Snap/Cut editing and snap while dragging stickiness.
+  New plugins of CriKey, Motion51 and HistEq added.
+  Perspective/BlueBanana/C41 plugins were fixed/improved.
+  Grabshot/Snapshot new options for screen grab/shot.
+  Colorspace & Color range improvements for BT601/709/2020.
+  HV7 mods merged in to include X11 Direct playback.
+  Alternative shortcut keys for computers without numpad.
+  Search box in the Resources window to narrow choices.
+  Proxy Editing added to Settings pulldown.
+  OpenCV optional compile with 4 plugins now available.
+  Shortcuts.html added to shell cmds icon for easy view.
+  Faststart option added for Mp4 and QT ffmpeg format.
+  Probe Order preference added for flexibility.
+  Dcraw program updated to latest Coffin version.
+  Zoom bar in compositor handles any size.
+  Upgraded FFMPEG to 3.3 + other 3rd party libraries.
+  Title plugin major changes to include:
+   ColorPicker added, fast Font selection,
+   Stroker for fonts added, BC_FONT_PATH.
+   Drag with 9 different handles, Background
+     video, individual character attributes of
+     Color, Size, Font, Underline, Bold, Italic,
+     Caps, Blink, Alpha, Nudge, Sup(erscript,
+     subscript), and PNG inclusion + Rt. Click.
+   Now handles 3071 characters and a count provided.
+  Bluray creation improved & allows for non-root usage.
+  Unicode characters can be put into textbox.
+  Smooth Lines create near-perfect circles/curves.

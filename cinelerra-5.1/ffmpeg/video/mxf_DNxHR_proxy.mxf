@@ -1,0 +1,3 @@
+mxf dnxhd
+cin_pix_fmt=yuv422p
+profile=dnxhr_lb

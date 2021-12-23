@@ -1,0 +1,139 @@
+--- ffmpeg-4.4/libavcodec/hevc_mvs.c.orig	2021-05-08 12:22:19.580985429 +0300
++++ ffmpeg-4.4/libavcodec/hevc_mvs.c	2021-05-08 12:29:05.340985454 +0300
+@@ -307,8 +307,8 @@
+     const int xB1    = x0 + nPbW - 1;
+     const int yB1    = y0 - 1;
+
+-    const int xB0    = x0 + nPbW;
+-    const int yB0    = y0 - 1;
++    const int xB0_    = x0 + nPbW;
++    const int yB0_    = y0 - 1;
+
+     const int xA0    = x0 - 1;
+     const int yA0    = y0 + nPbH;
+@@ -365,14 +365,14 @@
+     }
+
+     // above right spatial merge candidate
+-    is_available_b0 = AVAILABLE(cand_up_right, B0) &&
+-                      xB0 < s->ps.sps->width &&
+-                      PRED_BLOCK_AVAILABLE(B0) &&
+-                      !is_diff_mer(s, xB0, yB0, x0, y0);
++    is_available_b0 = AVAILABLE(cand_up_right, B0_) &&
++                      xB0_ < s->ps.sps->width &&
++                      PRED_BLOCK_AVAILABLE(B0_) &&
++                      !is_diff_mer(s, xB0_, yB0_, x0, y0);
+
+     if (is_available_b0 &&
+-        !(is_available_b1 && COMPARE_MV_REFIDX(B0, B1))) {
+-        mergecandlist[nb_merge_cand] = TAB_MVF_PU(B0);
++        !(is_available_b1 && COMPARE_MV_REFIDX(B0_, B1))) {
++        mergecandlist[nb_merge_cand] = TAB_MVF_PU(B0_);
+         if (merge_idx == nb_merge_cand)
+             return;
+         nb_merge_cand++;
+@@ -588,7 +588,7 @@
+     MvField *tab_mvf = s->ref->tab_mvf;
+     int isScaledFlag_L0 = 0;
+     int availableFlagLXA0 = 1;
+-    int availableFlagLXB0 = 1;
++    int availableFlagLXB0_ = 1;
+     int numMVPCandLX = 0;
+     int min_pu_width = s->ps.sps->min_pu_width;
+
+@@ -596,7 +596,7 @@
+     int is_available_a0;
+     int xA1, yA1;
+     int is_available_a1;
+-    int xB0, yB0;
++    int xB0_, yB0_;
+     int is_available_b0;
+     int xB1, yB1;
+     int is_available_b1;
+@@ -677,12 +677,12 @@
+ b_candidates:
+     // B candidates
+     // above right spatial merge candidate
+-    xB0    = x0 + nPbW;
+-    yB0    = y0 - 1;
++    xB0_    = x0 + nPbW;
++    yB0_    = y0 - 1;
+
+-    is_available_b0 =  AVAILABLE(cand_up_right, B0) &&
+-                       xB0 < s->ps.sps->width &&
+-                       PRED_BLOCK_AVAILABLE(B0);
++    is_available_b0 =  AVAILABLE(cand_up_right, B0_) &&
++                       xB0_ < s->ps.sps->width &&
++                       PRED_BLOCK_AVAILABLE(B0_);
+
+     // above spatial merge candidate
+     xB1    = x0 + nPbW - 1;
+@@ -696,10 +696,10 @@
+
+     // above right spatial merge candidate
+     if (is_available_b0) {
+-        if (MP_MX(B0, pred_flag_index_l0, mxB)) {
++        if (MP_MX(B0_, pred_flag_index_l0, mxB)) {
+             goto scalef;
+         }
+-        if (MP_MX(B0, pred_flag_index_l1, mxB)) {
++        if (MP_MX(B0_, pred_flag_index_l1, mxB)) {
+             goto scalef;
+         }
+     }
+@@ -723,40 +723,40 @@
+             goto scalef;
+         }
+     }
+-    availableFlagLXB0 = 0;
++    availableFlagLXB0_ = 0;
+
+ scalef:
+     if (!isScaledFlag_L0) {
+-        if (availableFlagLXB0) {
++        if (availableFlagLXB0_) {
+             availableFlagLXA0 = 1;
+             mxA = mxB;
+         }
+-        availableFlagLXB0 = 0;
++        availableFlagLXB0_ = 0;
+
+         // XB0 and L1
+         if (is_available_b0) {
+-            availableFlagLXB0 = MP_MX_LT(B0, pred_flag_index_l0, mxB);
+-            if (!availableFlagLXB0)
+-                availableFlagLXB0 = MP_MX_LT(B0, pred_flag_index_l1, mxB);
++            availableFlagLXB0_ = MP_MX_LT(B0_, pred_flag_index_l0, mxB);
++            if (!availableFlagLXB0_)
++                availableFlagLXB0_ = MP_MX_LT(B0_, pred_flag_index_l1, mxB);
+         }
+
+-        if (is_available_b1 && !availableFlagLXB0) {
+-            availableFlagLXB0 = MP_MX_LT(B1, pred_flag_index_l0, mxB);
+-            if (!availableFlagLXB0)
+-                availableFlagLXB0 = MP_MX_LT(B1, pred_flag_index_l1, mxB);
++        if (is_available_b1 && !availableFlagLXB0_) {
++            availableFlagLXB0_ = MP_MX_LT(B1, pred_flag_index_l0, mxB);
++            if (!availableFlagLXB0_)
++                availableFlagLXB0_ = MP_MX_LT(B1, pred_flag_index_l1, mxB);
+         }
+
+-        if (is_available_b2 && !availableFlagLXB0) {
+-            availableFlagLXB0 = MP_MX_LT(B2, pred_flag_index_l0, mxB);
+-            if (!availableFlagLXB0)
+-                availableFlagLXB0 = MP_MX_LT(B2, pred_flag_index_l1, mxB);
++        if (is_available_b2 && !availableFlagLXB0_) {
++            availableFlagLXB0_ = MP_MX_LT(B2, pred_flag_index_l0, mxB);
++            if (!availableFlagLXB0_)
++                availableFlagLXB0_ = MP_MX_LT(B2, pred_flag_index_l1, mxB);
+         }
+     }
+
+     if (availableFlagLXA0)
+         mvpcand_list[numMVPCandLX++] = mxA;
+
+-    if (availableFlagLXB0 && (!availableFlagLXA0 || mxA.x != mxB.x || mxA.y != mxB.y))
++    if (availableFlagLXB0_ && (!availableFlagLXA0 || mxA.x != mxB.x || mxA.y != mxB.y))
+         mvpcand_list[numMVPCandLX++] = mxB;
+
+     //temporal motion vector prediction candidate

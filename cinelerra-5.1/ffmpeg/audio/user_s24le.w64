@@ -1,0 +1,6 @@
+w64 pcm_s24le
+# Pure audio format.
+# PCM signed 24-bit little-endian (pcm_s24le) in
+# Sony Pictures Digital Wave 64 (Wave64, .w64)
+# ffmpeg --help encoder=pcm_s24le
+# ffmpeg --help muxer=w64

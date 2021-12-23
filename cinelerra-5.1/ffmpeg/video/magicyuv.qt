@@ -1,0 +1,5 @@
+mov magicyuv
+# A high-performance, ultra-fast, mathematically lossless video codec for recording, archiving,
+#   video post-production and uncompressed-quality playout at high resolutions.
+cin_pix_fmt yuv444p
+threads=2

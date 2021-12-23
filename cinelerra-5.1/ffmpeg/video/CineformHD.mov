@@ -1,0 +1,4 @@
+mov cfhd
+cin_ff_format=yuv442p10le
+quality=6
+# input Width must be divisible by 16 and Height by 8

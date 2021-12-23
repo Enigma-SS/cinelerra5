@@ -1,0 +1,4 @@
+mp4 h264_nvenc
+# encode for nvidia graphics hw only
+preset medium
+profile main

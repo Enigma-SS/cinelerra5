@@ -1,0 +1,4 @@
+mov dnxhd
+profile=dnxhr_444
+cin_pix_fmt=yuv444p10le
+# also gbrp10le

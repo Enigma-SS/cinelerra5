@@ -1,0 +1,4 @@
+mov utvideo
+# Fast/lossless codec based on Huffman code developed as an alternative to HuffYUV for better compression.
+cin_pix_fmt yuv444p
+threads=2

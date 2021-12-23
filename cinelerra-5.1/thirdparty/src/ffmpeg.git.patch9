@@ -1,0 +1,36 @@
+diff --git a/libavutil/hwcontext_cuda.c b/libavutil/hwcontext_cuda.c
+index 718a449b6e..84685fe1d9 100644
+--- a/libavutil/hwcontext_cuda.c
++++ b/libavutil/hwcontext_cuda.c
+@@ -269,9 +269,11 @@ static void cuda_device_uninit(AVHWDeviceContext *device_ctx)
+         CudaFunctions *cu = hwctx->internal->cuda_dl;
+ 
+         if (hwctx->internal->is_allocated && hwctx->cuda_ctx) {
++#ifdef CUDA_PRIMARY_CTX
+             if (hwctx->internal->flags & AV_CUDA_USE_PRIMARY_CONTEXT)
+                 CHECK_CU(cu->cuDevicePrimaryCtxRelease(hwctx->internal->cuda_device));
+             else
++#endif
+                 CHECK_CU(cu->cuCtxDestroy(hwctx->cuda_ctx));
+ 
+             hwctx->cuda_ctx = NULL;
+@@ -321,7 +323,7 @@ static int cuda_context_init(AVHWDeviceContext *device_ctx, int flags) {
+     cu = hwctx->internal->cuda_dl;
+ 
+     hwctx->internal->flags = flags;
+-
++#ifdef CUDA_PRIMARY_CTX
+     if (flags & AV_CUDA_USE_PRIMARY_CONTEXT) {
+         ret = CHECK_CU(cu->cuDevicePrimaryCtxGetState(hwctx->internal->cuda_device,
+                        &dev_flags, &dev_active));
+@@ -342,7 +344,9 @@ static int cuda_context_init(AVHWDeviceContext *device_ctx, int flags) {
+                                                     hwctx->internal->cuda_device));
+         if (ret < 0)
+             return ret;
+-    } else {
++    } else
++#endif
++    {
+         ret = CHECK_CU(cu->cuCtxCreate(&hwctx->cuda_ctx, desired_flags,
+                                        hwctx->internal->cuda_device));
+         if (ret < 0)

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="22"
+   height="22"
+   viewBox="0 0 22 22"
+   version="1.1"
+   id="svg2780"
+   inkscape:version="0.92.4 (unknown)"
+   sodipodi:docname="mask_button_dn.svg">
+  <title
+     id="title865">Buttons for Cinelerra Mask Tool</title>
+  <defs
+     id="defs2774">
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect3001"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2979"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect2975"
+       effect="bspline" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect3005"
+       effect="bspline" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2989"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <linearGradient
+       id="linearGradient3700-35">
+      <stop
+         style="stop-color:#414abe;stop-opacity:1;"
+         offset="0"
+         id="stop3702-62" />
+      <stop
+         style="stop-color:#414abe;stop-opacity:0;"
+         offset="1"
+         id="stop3704-9" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect3001-3"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2979-6"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect2975-7"
+       effect="bspline" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect3005-5"
+       effect="bspline" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2989-3"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <linearGradient
+       id="linearGradient3700-35-5">
+      <stop
+         style="stop-color:#d1d5d7;stop-opacity:1;"
+         offset="0"
+         id="stop3702-62-6" />
+      <stop
+         style="stop-color:#d1d5d7;stop-opacity:0;"
+         offset="1"
+         id="stop3704-9-2" />
+    </linearGradient>
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect3001-9"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2979-1"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect2975-2"
+       effect="bspline" />
+    <inkscape:path-effect
+       only_selected="false"
+       apply_with_weight="true"
+       apply_no_weight="true"
+       helper_size="0"
+       steps="2"
+       weight="33.333333"
+       is_visible="true"
+       id="path-effect3005-7"
+       effect="bspline" />
+    <inkscape:path-effect
+       effect="bspline"
+       id="path-effect2989-0"
+       is_visible="true"
+       weight="33.333333"
+       steps="2"
+       helper_size="0"
+       apply_no_weight="true"
+       apply_with_weight="true"
+       only_selected="false" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="18.985817"
+     inkscape:cx="1.1808142"
+     inkscape:cy="9.2740964"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     showborder="true"
+     borderlayer="false"
+     inkscape:window-width="1280"
+     inkscape:window-height="751"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid5013" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata2777">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Buttons for Cinelerra Mask Tool</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+        <dc:date>2019-07-xx</dc:date>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Copyleft</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>IgorBeg</dc:title>
+          </cc:Agent>
+        </dc:creator>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-289.70833)">
+    <g
+       style="display:inline"
+       id="g3898"
+       transform="translate(-186,198.00752)"
+       inkscape:export-filename="/home/charlie/Documents/Cinelerra_themes_MaskTool_LinearSmooth_SVG-PNG_btns/export-Blue-dot_20190709/mask_button_dn.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <rect
+         y="91.700806"
+         x="186"
+         height="22.000015"
+         width="22"
+         id="rect3886"
+         style="display:inline;fill:#e3e3e3;fill-opacity:1;stroke:none;stroke-width:0.99999994"
+         inkscape:export-filename="/home/charlie/Documents/Cinelerra_themes_Suv-Unflat-Neophyte_Mask-and-Clear_btns/Cin_themes_SUV-Unflat-Neophyte_Mask-and-Clear_btns/export-Blue-dot_20190522/reset_dn.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <image
+         y="92.700806"
+         x="187"
+         id="image3888"
+         xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAABmJLR0QA/wD/AP+gvaeTAAAACXBI WXMAAAsSAAALEgHS3X78AAAAB3RJTUUH1goeBzUdNr3VdQAABG9JREFUWMPFmN2LVHUYxz+/7zkz u2q+IF24O+rsZhheFQUmqb0IGko32UVFFNRtf0HURVBIN0F01RsRQWEvSPRCBBWaGAnWRUSGu5PO jAa9qfi2tnPO93Qx54yzo7uu4rgPDAeGw+/5/L7P83vO8/zCnt3fMlsbrlQCMAgssH2DpAqwHFgE BOAUcExBDeBskM4B55uNumezfjxLiAi40fbNwHrgPttrbS8B1P2upAzxL/CTzG5g34qV1UPA381G PZ3JT5hJmeFKJeQO19t+wPbWzNly270AFxZUQFLxXybpmIK+CtJnwHfNRv3EVSlje7XtJ21vT5N0 lbM2hELbWeG4F8g2tpEUbC9HPCWzKUifrFhZfa3ZqB+6IphlQ0N32H6xNdm625nnFxBRHBHHcXv3 Qbka7WfmPDUicOYOGBCceVTm6SCtWrGy+jKwt9moZ1MUngZkg+1XW5OtLUmazFcQpVKJgcEBBgcG KZXKRFFMkDogBVTxi6KYKIqJo7gDDZSBbcAOSVuqI6NhRmWWDQ3dZntHa7J1Z5ImiqOYUrlEHLcX 77Xu8FwizB3YCBXKxcA64FngNPD9RcoMVyosGxpaZfuF1mRrfZImUblUZmBwgHKuRDdAV5JOa73v dKkYARuAZ6ojo2sKhdS1i4W2H29Ntu7pVqRUKhO6nF8OYCaonjUCsBl4JK9TbZjhSkXA2jRJtzvz wk5ooph+mqQB4DHg9urIaKRclSW277e9BuicmHCJY3sNQYrnTZIeAhZouFIBqNre5syxgqYkaz9A esIXgAclLRdQtn1r5mx1R5XrAGK7G2oI2CTb84CNtkuFKqGPENOEKwBbBcwH1l7qKPbbCnVyv3cJ mAeMdD5yQX0P0TS2OAaW5kBzAdDeeAigtgzzgagACXMEVBQ9A9lcKaMwpQ3RaSCdEyV6Ni/ghKRT QWFqT3L9gSzgPPCrpCmF6HpAaGo/dFQKmpC0vyAsOrTrdoou1Jw9AiaAfcDZ3j62n1a0rrmvBPhC QKKgg5J+LCD6nTft/jl0QuQs+w3Yr6NHmwBNBX0uaaLf6kh5VxDHxYFJgfeBv5QXunNB+lpBP/Q7 byQRR1EnREmaHrD9pe0JAeQjwy9B+kBBfyqoL6GK45hyqUQUx9gmTZKTwNvAwcO/17JOTJqNegt4 L0jvhnYhvOahKUDy8Jx1lr1p++Pa+Nh/F81NzUb9DPAKsCsf2vsCkibJuSRNd9l+vTY+dnzaIa7Z qP8h6XlJOyVNTDd2zKaglctlyqUSpamhOZOk6Ye2X6qNj9UuO97Wjxw+Uh0ZfQ44DjyaX31MAbrU Seueu4sPYOh6P02Sf5xlb9h+qzY+dviKbiGqI6NLga2SngA2Spq27ymqaU+JL/JjMknTfcA7tj+t jY+dvJr7mePAR7YPSLrX9sOS1tme11GhC6LLeaHGhLPsALDT9m5grDY+1rqq+5kuhYKkMrAYuAXY LGkTsEbSonxcJe+NTgM/A3ttfwMcBE4Ak7XxsWwmP/8Db9zm7xPPq4wAAAAASUVORK5CYII= "
+         preserveAspectRatio="none"
+         height="20"
+         width="20"
+         style="display:inline;stroke-width:1.75"
+         inkscape:export-filename="/home/charlie/Documents/Cinelerra_themes_Suv-Unflat-Neophyte_Mask-and-Clear_btns/Cin_themes_SUV-Unflat-Neophyte_Mask-and-Clear_btns/export-Blue-dot_20190522/reset_dn.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+	<title>Cinelerra GG Configure Shell Command</title>
+
+	<style type="text/css">
+.xflip {
+ -moz-transform: scaleX(-1);
+ -webkit-transform: scaleX(-1);
+ -o-transform: scaleX(-1);
+ transform: scaleX(-1);
+ filter: fliph;
+}
+.yflip {
+ -moz-transform: scaleY(-1);
+ -webkit-transform: scaleY(-1);
+ -o-transform: scaleY(-1);
+ transform: scaleY(-1);
+ filter: flipv;
+}
+.xyflip {
+ -moz-transform: scaleX(-1) scaleY(-1);
+ -webkit-transform: scaleX(-1) scaleY(-1);
+ -o-transform: scaleX(-1) scaleY(-1);
+ transform: scaleX(-1) scaleY(-1);
+ filter: fliph + flipv;
+}
+body { 
+ margin-top:0;
+ margin-left: 10px;
+ font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+h1 {
+ margin-top:0;
+ margin-bottom:0;
+ font-size: 1.5em;
+ color: #3d77d5;
+}
+h2{
+ margin-top:0;
+ margin-bottom:8px;
+ font-size: 1.2em;
+ color: gray;
+ text-decoration: underline black;
+}
+p { 
+ margin-top:0;
+ margin-bottom: 12px;
+ line-height: 100%;
+ font-size: 1em;
+}
+li {
+ line-height:100%;  
+}
+li p {
+ line-height:100%;  
+}
+
+	</style>
+</head>
+<body lang="en">
+<h1>Cinelerra GG</h1>
+<h2>Shell menu commands</h2>
+<p>The Shell Cmds popup menu items are configured in:</p>
+<p><b>Settings-&gt;Preferences-&gt;Interface-&gt;Shell Commands</b></p>
+<p>This runs a dialog that lets you Add/Del/Edit the items in the main menu popup.  Possible options are:</p>
+
+<ol>
+	<li/>
+<p><b>Add a new menu item/script: </b></p>
+<p>click Add</p>
+<p>in the Label box, change the word &#34;new&#34; to the desired menu label</p>
+<p>in the Commands box, type the command lines to be included in the script</p>
+<p><i>(for example: Label =&gt; gimp; Commands =&gt; gimp)</i></p>
+<p>check-OK in the Commands window</p>
+<p>check-OK in the Shell window</p>
+<p>click on OK or Apply in the Preferences window (WILL NOT TAKE EFFECT UNTIL CLICK)</p>
+	<li/>
+<p><b>Del to delete an existing menu item (for example manual):</b></p>
+<p> select to highlight an entry in the Cinelerra: Shell listbox</p>
+<p> click Del </p>
+<p> check-OK in the Shell window</p>
+<p> click on OK or Apply in the Preferences window (the entry is destroyed)</p>
+	<li/>
+<p><b>Edit an existing menu item:</b></p>
+<p>click Edit</p>
+<p>select to highlight an entry in the Cinelerra: Shell listbox</p>
+<p>click edit (the edit dialog appears)</p>
+<p>set the label and/or commands to the new desired values</p>
+<p>check-OK in the Shell window</p>
+<p>click on OK or Apply in the Preferences window</p>
+</body>
+</html>

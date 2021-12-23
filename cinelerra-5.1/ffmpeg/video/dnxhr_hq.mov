@@ -1,0 +1,4 @@
+mov dnxhd
+profile=dnxhr_hq
+cin_pix_fmt=yuv422p
+

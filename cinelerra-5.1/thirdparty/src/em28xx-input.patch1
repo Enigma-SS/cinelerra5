@@ -1,0 +1,67 @@
+diff --git a/drivers/media/usb/em28xx/em28xx-input.c b/drivers/media/usb/em28xx/em28xx-input.c
+index 5aa15a7..a27a621 100644
+--- a/drivers/media/usb/em28xx/em28xx-input.c
++++ b/drivers/media/usb/em28xx/em28xx-input.c
+@@ -63,8 +63,10 @@ struct em28xx_IR {
+ 
+ 	/* poll decoder */
+ 	int polling;
++	int keypressed;
+ 	struct delayed_work work;
+ 	unsigned int full_code:1;
++	unsigned int last_toggle_bit;
+ 	unsigned int last_readcount;
+ 	u64 rc_proto;
+ 
+@@ -331,8 +333,34 @@ static void em28xx_ir_handle_key(struct em28xx_IR *ir)
+ 		dprintk("ir->get_key() failed: %d\n", result);
+ 		return;
+ 	}
+-
+-	if (unlikely(poll_result.read_count != ir->last_readcount)) {
++	if (ir->dev->model == EM28174_BOARD_HAUPPAUGE_WINTV_DUALHD_01595) {
++		if (likely(poll_result.toggle_bit == ir->last_toggle_bit &&
++			   poll_result.read_count == ir->last_readcount))
++			return;
++		dprintk("%s: toggle: %d, count: %d, key 0x%04x\n", __func__,
++			poll_result.toggle_bit, poll_result.read_count,
++			poll_result.scancode);
++		ir->rc->input_dev->evbit[0] &= ~BIT_MASK(EV_REP);
++		if( poll_result.read_count & 1 ) {
++			if (!ir->keypressed) {
++				ir->keypressed = true;
++				if( poll_result.toggle_bit == ir->last_toggle_bit )
++					return;
++				ir->rc->keypressed = false;
++				rc_keydown_notimeout(ir->rc,
++					poll_result.protocol,
++					poll_result.scancode,
++					poll_result.toggle_bit);
++				ir->rc->keypressed = false;
++			}
++		}
++		else if (ir->keypressed) {
++			ir->keypressed = false;
++			ir->rc->keypressed = true;
++			rc_keyup(ir->rc);
++		}
++	}
++	else if (unlikely(poll_result.read_count != ir->last_readcount)) {
+ 		dprintk("%s: toggle: %d, count: %d, key 0x%04x\n", __func__,
+ 			poll_result.toggle_bit, poll_result.read_count,
+ 			poll_result.scancode);
+@@ -357,10 +385,11 @@ static void em28xx_ir_handle_key(struct em28xx_IR *ir)
+ 			 * non-zero read count as opposed to a readcount
+ 			 * that is incrementing
+ 			 */
+-			ir->last_readcount = 0;
+-		else
+-			ir->last_readcount = poll_result.read_count;
++			poll_result.read_count = 0;
+ 	}
++
++	ir->last_toggle_bit = poll_result.toggle_bit;
++	ir->last_readcount = poll_result.read_count;
+ }
+ 
+ static void em28xx_ir_work(struct work_struct *work)

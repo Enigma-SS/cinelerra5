@@ -1,0 +1,211 @@
+diff --git a/cinelerra-5.1/cinelerra/Makefile b/cinelerra-5.1/cinelerra/Makefile
+index a22a21a..fc6dfba 100644
+--- a/cinelerra-5.1/cinelerra/Makefile
++++ b/cinelerra-5.1/cinelerra/Makefile
+@@ -426,10 +426,13 @@ endif
+ LIBS := $(LIBRARIES)
+ 
+ ifeq ($(WANT_CIN_3RDPARTY),no)
+-LIBS += -lavcodec -lavdevice -lavfilter -lavformat -lavutil
+-LIBS += -lswresample -lswscale
+-LIBS += -lintl -liconv
+-LIBS += -lexecinfo
++LIBS += -L$(FF_PATH)/lib
++LIBS += -Wl,--out-implib,x86_64/libcin.exe.a
++LIBS += -Wl,-rpath-link=:$(FF_PATH)/lib -Wl,--as-needed -Wl,--warn-common
++LIBS += -lavdevice -lavfilter -lavformat -lavcodec
++LIBS += -lswresample -lswscale -lavutil
++LIBS += -L/usr/lib -lintl -liconv
++LIBS += -lsecur32 -lole32 -luser32 -luser32 -lbcrypt -lshell32
+ 
+ LIBS += $(shared_libs)
+ LIBS += $(system_libs)
+@@ -492,7 +495,7 @@ CFLAGS += -DUSE_ALPHA
+ 
+ else
+ 
+-LDFLAGS1 = -Wl,-export-dynamic -g
++LDFLAGS1 = -Wl,-export-all-symbols -g
+ LDFLAGS2 = $(LDFLAGS)
+ LINKER = $(CXX) -o $(OUTPUT)
+ 
+@@ -510,7 +513,7 @@ all:	$(OUTPUT) $(CUTADS) $(BDWRITE) $(LV2UI)
+ $(OUTPUT): $(OBJS) $(THEME_DATA) $(DCRAW) $(LIBRARIES)
+ 	$(LINKER) `cat $(OBJDIR)/objs`
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(OUTPUT) $(OUTPUT_G))
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
+ 	ln -f -s ../bin/$(WANT_CIN) ci
+ 
+ ifneq ($(WANT_COMMERCIAL),no)
+@@ -518,7 +521,7 @@ $(CUTADS):	$(CUTOBJS) $(CUTLIBS) $(LIBRARIES)
+ 	@echo $(CXX) -o $@ $(CUTOBJS)
+ 	@$(CXX) $(CFLAGS) -pthread -o $@ $(CUTOBJS) $(CUTLIBS) $(LIBS)
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(CUTADS) $(CUTADS).debuginfo)
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(CUTADS))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(CUTADS))
+ 
+ install-cutads:
+ 	cp -av $(OBJDIR)/cutads $(BINDIR)/.
+@@ -530,7 +533,7 @@ $(BDWRITE):	$(BDWOBJS) $(LIBRARIES)
+ 	@echo $(CXX) -o $@ $(BDWOBJS)
+ 	@$(CXX) $(CFLAGS) -pthread -o $@ $(BDWOBJS) $(LIBS)
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(BDWRITE) $(BDWRITE).debuginfo)
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(BDWRITE))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(BDWRITE))
+ 
+ install-bdwrite:
+ 	cp -av $(OBJDIR)/bdwrite $(BINDIR)/.
+@@ -573,7 +576,7 @@ $(OBJDIR)/lv2ui: $(LV2OBJS)
+ 	@echo $(CXX) \`cat $(OBJDIR)/c_flags\` $^ -o $@
+ 	@$(CXX) `cat $(OBJDIR)/c_flags` $^ -o $@ $(LIBS) $(GTK2_LIBS)
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(LV2UI) $(LV2UI).debuginfo)
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(LV2UI))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(LV2UI))
+ 
+ .PHONY:	lv2ui
+ lv2ui:	$(LV2UI)
+diff --git a/cinelerra-5.1/db/tdb.h b/cinelerra-5.1/db/tdb.h
+index 8ee8800..9a17091 100644
+--- a/cinelerra-5.1/db/tdb.h
++++ b/cinelerra-5.1/db/tdb.h
+@@ -32,7 +32,7 @@ inline void operator delete[](void *t,size_t n) { free(t); }
+ #endif
+ 
+ #define ZMEDIA
+-#define ZFUTEX
++//#define ZFUTEX
+ #ifdef ZFUTEX
+ #include <unistd.h>
+ #include <endian.h>
+diff --git a/cinelerra-5.1/guicast/bcresources.C b/cinelerra-5.1/guicast/bcresources.C
+index 1d52855..fdab491 100644
+--- a/cinelerra-5.1/guicast/bcresources.C
++++ b/cinelerra-5.1/guicast/bcresources.C
+@@ -367,8 +367,8 @@ BC_Resources::BC_Resources(float x_scale, float y_scale)
+ 	BC_WindowBase::resources = this;
+ 	synchronous = 0;
+ 	vframe_shm = 0;
+-	use_shm = -1;
+-	shm_reply = 1;
++	use_shm = 0;
++	shm_reply = 0;
+ 
+ 	if( x_scale <= 0 ) x_scale = 1;
+ 	if( y_scale <= 0 ) y_scale = x_scale;
+diff --git a/cinelerra-5.1/guicast/bcsignals.C b/cinelerra-5.1/guicast/bcsignals.C
+index ffc8a1c..ad11365 100644
+--- a/cinelerra-5.1/guicast/bcsignals.C
++++ b/cinelerra-5.1/guicast/bcsignals.C
+@@ -44,6 +44,7 @@
+ #include <sys/prctl.h>
+ #endif
+ #include <sys/types.h>
++#include <sys/wait.h>
+ 
+ BC_Signals* BC_Signals::global_signals = 0;
+ static int signal_done = 0;
+diff --git a/cinelerra-5.1/guicast/bctrace.C b/cinelerra-5.1/guicast/bctrace.C
+index 7e45392..2d08b46 100644
+--- a/cinelerra-5.1/guicast/bctrace.C
++++ b/cinelerra-5.1/guicast/bctrace.C
+@@ -309,7 +309,7 @@ void BC_Trace::dump_traces(FILE *fp)
+ 	}
+ }
+ 
+-void trace_info::set_owner() { owner = pthread_self(); }
++void trace_info::set_owner() { owner = (unsigned long)pthread_self(); }
+ void trace_info::unset_owner() { owner = 0; }
+ 
+ void BC_Trace::dump_locks(FILE *fp)
+@@ -322,7 +322,7 @@ void BC_Trace::dump_locks(FILE *fp)
+ 		fprintf(fp,"    %p %s, %s %p%s",
+ 			p->info, p->title, p->loc,
+ 			(void*)p->tid, p->is_owner ? " *" : "");
+-		if( p->info->owner && p->info->owner != p->tid )
++		if( p->info->owner && p->info->owner != (unsigned long)p->tid )
+ 			fprintf(fp," %p", (void*)p->info->owner);
+ 		fprintf(fp,"\n");
+ 	}
+diff --git a/cinelerra-5.1/guicast/filesystem.h b/cinelerra-5.1/guicast/filesystem.h
+index c976135..5613702 100644
+--- a/cinelerra-5.1/guicast/filesystem.h
++++ b/cinelerra-5.1/guicast/filesystem.h
+@@ -26,6 +26,9 @@
+ #include "bcwindowbase.inc"
+ #include "sizes.h"
+ 
++#define dirent64 dirent
++#define readdir64 readdir
++
+ class FileItem
+ {
+ public:
+diff --git a/cinelerra-5.1/plugin_config b/cinelerra-5.1/plugin_config
+index 56f4351..ecd5837 100644
+--- a/cinelerra-5.1/plugin_config
++++ b/cinelerra-5.1/plugin_config
+@@ -4,12 +4,21 @@ CFLAGS += -I../ -I$(CINELERRA) -I$(GUICAST) -I../colors -fPIC
+ CFLAGS += $(static_incs)
+ LFLAGS += $(static_libs)
+ LFLAGS += $(LDFLAGS)
++
++LFLAGS +=  -Wl,$(CINELERRA)/$(OBJDIR)/libcin.exe.a
++LFLAGS += -lintl -liconv
++ifneq ($(WANT_GL),no)
++LFLAGS += -lGL -lGLU
++endif
++
+ LDLINKER ?= $(CXX) -shared
+ $(shell mkdir -p $(OBJDIR))
+ 
++#SFX=plugin
++SFX=dll
+ PLUGIN_DIR := $(BINDIR)/plugins
+ OUTPUT_DIR = $(PLUGIN_DIR)/$($(PLUGIN))
+-OUTPUT = $(OUTPUT_DIR)/$(PLUGIN).plugin
++OUTPUT = $(OUTPUT_DIR)/$(PLUGIN).$(SFX)
+ OUTPUT_G = $(OBJDIR)/$(PLUGIN).debuginfo
+ 
+ $(shell echo $(CFLAGS) > $(OBJDIR)/c_flags)
+@@ -20,16 +29,16 @@ ifeq ($(OUTPUT_THEME),)
+ $(OUTPUT): $(OBJS) $(OUTPUT_DIR) $(OUTPUT_BINS)
+ 	$(LDLINKER) -o $(OUTPUT) $(OBJS) $(OUTPUT_BINS) `cat $(OBJDIR)/l_flags`
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(OUTPUT) $(OUTPUT_G))
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
+ 
+ else
+ 
+ THEME_DATA = $(OBJDIR)/$(PLUGIN)_data.o
+ 
+ $(OUTPUT_THEME): $(OBJS) $(OUTPUT_DIR) $(THEME_DATA)
+-	$(LDLINKER) -o $(OUTPUT_THEME) $(OBJS) $(THEME_DATA) $(LDFLAGS)
++	$(LDLINKER) -o $(OUTPUT_THEME) $(OBJS) $(THEME_DATA) `cat $(OBJDIR)/l_flags`
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(OUTPUT_THEME) $(OUTPUT_G))
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT_THEME))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT_THEME))
+ 
+ $(THEME_DATA):
+ 	cd $(OBJDIR) && \
+diff --git a/cinelerra-5.1/plugins/Makefile b/cinelerra-5.1/plugins/Makefile
+index 22bc7dd..6404536 100644
+--- a/cinelerra-5.1/plugins/Makefile
++++ b/cinelerra-5.1/plugins/Makefile
+@@ -36,7 +36,6 @@ DIRS = $(OPENCV_OBJS) \
+ 	brightness \
+ 	burn \
+ 	C41 \
+-	cdripper \
+ 	chorus \
+ 	chromakey \
+ 	chromakeyhsv \
+@@ -176,6 +175,8 @@ DIRS = $(OPENCV_OBJS) \
+ #	denoisemjpeg \
+ # duplicate
+ #	vocoder \
++# not in bsd or win
++#	cdripper \
+ 
+ PLUGIN_DIR = $(BINDIR)/plugins
+ DATA = $(PLUGIN_DIR)/fonts $(PLUGIN_DIR)/shapes

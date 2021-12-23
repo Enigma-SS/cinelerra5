@@ -1,0 +1,113 @@
+From: Andrew Randrianasulu <randrianasulu@gmail.com>
+Date: Sun, 20 Jun 2021 10:35:26 +0300
+Subject: [PATCH 32/67] Add multilib x265 (slower compilation, but you can
+ render 10 bit h265 out of the box)
+
+---
+ cinelerra-5.1/thirdparty/Makefile            |  5 +-
+ cinelerra-5.1/thirdparty/src/x265_3.5.patch1 |  4 ++
+ cinelerra-5.1/thirdparty/src/x265_3.5.patch2 |  7 +++
+ cinelerra-5.1/thirdparty/src/x265_3.5.patch3 | 57 ++++++++++++++++++++
+ 4 files changed, 71 insertions(+), 2 deletions(-)
+ create mode 100644 cinelerra-5.1/thirdparty/src/x265_3.5.patch1
+ create mode 100644 cinelerra-5.1/thirdparty/src/x265_3.5.patch2
+ create mode 100644 cinelerra-5.1/thirdparty/src/x265_3.5.patch3
+
+diff --git a/cinelerra-5.1/thirdparty/Makefile b/cinelerra-5.1/thirdparty/Makefile
+--- a/cinelerra-5.1/thirdparty/Makefile
++++ b/cinelerra-5.1/thirdparty/Makefile
+@@ -250,8 +250,9 @@ tiff.cfg_params+= --enable-shared=no --disable-zstd $(call if_pkg,libwebp,\
+  $(call if_npkg,libwebp,--disable-webp)
+ twolame.cfg_params?=--enable-shared=no
+ x264.cfg_params?= --enable-static --enable-pic
+-x265.cfg_vars?=$(call cmake_config,source)
+-x265.cfg_params?= -DENABLE_SHARED=no
++x265.cfg_vars?=chmod +x ./configure; chmod +x ./multilib.sh;
++#x265.cfg_vars?=$(call cmake_config,source)
++#x265.cfg_params?= -DENABLE_SHARED=no
+ libvpx.cfg_params?= --enable-pic --disable-avx512 --disable-examples --disable-unit_tests
+
+ DS:=$$$$$$$$
+diff --git a/cinelerra-5.1/thirdparty/src/x265_3.5.patch1 b/cinelerra-5.1/thirdparty/src/x265_3.5.patch1
+new file mode 100644
+--- /dev/null
++++ b/cinelerra-5.1/thirdparty/src/x265_3.5.patch1
+@@ -0,0 +1,4 @@
++--- /dev/null	2020-03-14 06:02:18.586124011 +0300
+++++ ./configure	2020-03-18 00:04:59.360807192 +0300
++@@ -0,0 +1 @@
+++/bin/true
+diff --git a/cinelerra-5.1/thirdparty/src/x265_3.5.patch2 b/cinelerra-5.1/thirdparty/src/x265_3.5.patch2
+new file mode 100644
+--- /dev/null
++++ b/cinelerra-5.1/thirdparty/src/x265_3.5.patch2
+@@ -0,0 +1,7 @@
++--- /dev/null	2020-03-14 06:02:18.586124011 +0300
+++++ ./Makefile	2020-03-18 00:04:59.388807329 +0300
++@@ -0,0 +1,4 @@
+++#$(shell cd build/linux ; ./multilib.sh)
+++.NOTPARALLEL:
+++all:
+++	$(shell ./multilib.sh ; cp 8bit/libx265.a . ; cp 8bit/x265.pc . ; cp 8bit/x265_config.h .)
+diff --git a/cinelerra-5.1/thirdparty/src/x265_3.5.patch3 b/cinelerra-5.1/thirdparty/src/x265_3.5.patch3
+new file mode 100644
+--- /dev/null
++++ b/cinelerra-5.1/thirdparty/src/x265_3.5.patch3
+@@ -0,0 +1,57 @@
++--- /dev/null	2020-07-19 09:07:01.788494015 +0300
+++++ ./multilib.sh	2020-08-02 02:34:58.444933214 +0300
++@@ -0,0 +1,54 @@
+++#!/bin/sh
+++
+++mkdir -p 8bit 10bit 12bit
+++
+++
+++cd 12bit
+++if [ $(uname -m) == 'x86_64' ]; then
+++  # 64-bit stuff here
+++cmake ../source -DHIGH_BIT_DEPTH=ON -DENABLE_ASSEMBLY=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON
+++else
+++  # 32-bit stuff here
+++cmake ../source -DHIGH_BIT_DEPTH=ON -DENABLE_ASSEMBLY=OFF -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF -DMAIN12=ON
+++fi
+++make
+++
+++cd ../10bit
+++if [ $(uname -m) == 'x86_64' ]; then
+++  # 64-bit stuff here
+++cmake ../source -DHIGH_BIT_DEPTH=ON -DENABLE_ASSEMBLY=ON -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF
+++else
+++  # 32-bit stuff here
+++cmake ../source -DHIGH_BIT_DEPTH=ON -DENABLE_ASSEMBLY=OFF -DEXPORT_C_API=OFF -DENABLE_SHARED=OFF -DENABLE_CLI=OFF
+++fi
+++make
+++
+++cd ../8bit
+++ln -sf ../10bit/libx265.a libx265_main10.a
+++ln -sf ../12bit/libx265.a libx265_main12.a
+++cmake ../source -DEXTRA_LIB="x265_main10.a;x265_main12.a" -DENABLE_SHARED=OFF -DEXTRA_LINK_FLAGS=-L. -DLINKED_10BIT=ON -DLINKED_12BIT=ON
+++make
+++
+++# rename the 8bit library, then combine all three into libx265.a
+++mv libx265.a libx265_main.a
+++
+++uname=`uname`
+++if [ "$uname" = "Linux" ]
+++then
+++
+++# On Linux, we use GNU ar to combine the static libraries together
+++ar -M <<EOF
+++CREATE libx265.a
+++ADDLIB libx265_main.a
+++ADDLIB libx265_main10.a
+++ADDLIB libx265_main12.a
+++SAVE
+++END
+++EOF
+++
+++else
+++
+++# Mac/BSD libtool
+++libtool -static -o libx265.a libx265_main.a libx265_main10.a libx265_main12.a 2>/dev/null
+++
+++fi

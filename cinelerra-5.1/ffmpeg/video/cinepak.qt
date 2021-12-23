@@ -1,0 +1,5 @@
+mov cinepak
+# this encoder is very slow
+min_strips=3
+max_extra_cb_iterations=0
+

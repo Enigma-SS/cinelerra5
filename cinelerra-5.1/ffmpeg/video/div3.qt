@@ -1,0 +1,10 @@
+mov msmpeg4
+#trellis=1
+#mbd=bits
+mbd=rd
+flags=+aic
+trellis=2
+cmp=2
+subcmp=2
+# bitrate in bits / second!
+b=1000000

@@ -1,0 +1,8 @@
+mp4 libx264
+cin_pix_fmt=yuv422p10le
+flags -global_header
+keyint_min=0
+x264-params=keyint=0:colorprim=bt709:transfer=bt709:colormatrix=bt709
+avcintra-class=100
+bufsize=100000000
+level=4.1

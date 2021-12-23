@@ -1,0 +1,11 @@
+--- a/libavformat/yuv4mpegenc.c.orig	2021-06-15 23:40:32.239553104 +0300
++++ b/libavformat/yuv4mpegenc.c	2021-06-15 23:40:40.851553105 +0300
+@@ -313,7 +313,7 @@
+             av_log(s, AV_LOG_ERROR, "'%s' is not an official yuv4mpegpipe pixel format. "
+                    "Use '-strict -1' to encode to this pixel format.\n",
+                    av_get_pix_fmt_name(s->streams[0]->codecpar->format));
+-            return AVERROR(EINVAL);
++            //return AVERROR(EINVAL);
+         }
+         av_log(s, AV_LOG_WARNING, "Warning: generating non standard YUV stream. "
+                "Mjpegtools will not work.\n");

@@ -1,0 +1,5 @@
+# apply at init decode
+loglevel=fatal
+formatprobesize=5000000
+scan_all_pmts=1
+remap_video_decoder libaom-av1=libdav1d

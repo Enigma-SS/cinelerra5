@@ -1,0 +1,11 @@
+--- ./Makefile.am.orig	2021-11-29 09:48:57.020738370 +0300
++++ ./Makefile.am	2021-11-29 09:49:35.968738373 +0300
+@@ -60,7 +60,7 @@
+ 	rm -rf $(distdir)/_build/cmake
+ 	rm -rf $(distdir)/_inst/cmake
+ 
+-SUBDIRS = port libtiff tools build contrib test man html
++SUBDIRS = port libtiff build 
+ 
+ release:
+ 	(rm -f $(top_srcdir)/RELEASE-DATE && echo $(LIBTIFF_RELEASE_DATE) > $(top_srcdir)/RELEASE-DATE)

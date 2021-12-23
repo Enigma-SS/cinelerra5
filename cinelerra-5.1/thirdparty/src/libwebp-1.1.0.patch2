@@ -1,0 +1,20 @@
+diff --git a/cmake/cpu.cmake b/cmake/cpu.cmake
+index da9a42a..46a8f4a 100644
+--- a/cmake/cpu.cmake
++++ b/cmake/cpu.cmake
+@@ -46,14 +46,7 @@ set(WEBP_SIMD_FILES_TO_NOT_INCLUDE)
+ set(WEBP_SIMD_FILES_TO_INCLUDE)
+ set(WEBP_SIMD_FLAGS_TO_INCLUDE)
+ 
+-if(${ANDROID})
+-  if(${ANDROID_ABI} STREQUAL "armeabi-v7a")
+-    # This is because Android studio uses the configuration "-march=armv7-a
+-    # -mfloat-abi=softfp -mfpu=vfpv3-d16" that does not trigger neon
+-    # optimizations but should (as this configuration does not exist anymore).
+-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mfpu=neon ")
+-  endif()
+-endif()
++
+ 
+ list(LENGTH WEBP_SIMD_FLAGS WEBP_SIMD_FLAGS_LENGTH)
+ math(EXPR WEBP_SIMD_FLAGS_RANGE "${WEBP_SIMD_FLAGS_LENGTH} - 1")

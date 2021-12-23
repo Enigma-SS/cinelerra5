@@ -1,0 +1,4 @@
+Cakewalk - a theme for "Cinelerra GG", based on Neophyte.
+Author (Urheber): Olaf Wolff <cinmail@womentie.de>, 2019
+License: Attribution 4.0 International (CC BY 4.0) 
+         https://creativecommons.org/licenses/by/4.0/       

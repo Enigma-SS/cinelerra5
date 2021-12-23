@@ -1,0 +1,47 @@
+--- a/libavcodec/wrapped_avframe.c.orig	2021-06-15 22:37:02.955552877 +0300
++++ b/libavcodec/wrapped_avframe.c	2021-06-15 23:50:34.439553140 +0300
+@@ -109,6 +109,36 @@
+     return 0;
+ }
+
++
++
++static const enum AVPixelFormat pix_fmts_all[] = {
++    AV_PIX_FMT_YUV411P,
++    AV_PIX_FMT_YUV420P,
++    AV_PIX_FMT_YUVJ420P,
++    AV_PIX_FMT_YUV422P,
++    AV_PIX_FMT_YUVJ422P,
++    AV_PIX_FMT_YUV444P,
++    AV_PIX_FMT_YUVJ444P,
++    AV_PIX_FMT_YUV420P10,
++    AV_PIX_FMT_YUV422P10,
++    AV_PIX_FMT_YUV444P10,
++    AV_PIX_FMT_YUV420P12,
++    AV_PIX_FMT_YUV422P12,
++    AV_PIX_FMT_YUV444P12,
++    AV_PIX_FMT_YUV420P14,
++    AV_PIX_FMT_YUV422P14,
++    AV_PIX_FMT_YUV444P14,
++    AV_PIX_FMT_YUV420P16,
++    AV_PIX_FMT_YUV422P16,
++    AV_PIX_FMT_YUV444P16,
++    AV_PIX_FMT_GRAY8,
++    AV_PIX_FMT_GRAY9,
++    AV_PIX_FMT_GRAY10,
++    AV_PIX_FMT_GRAY12,
++    AV_PIX_FMT_GRAY16,
++    AV_PIX_FMT_NONE
++};
++
+ AVCodec ff_wrapped_avframe_encoder = {
+     .name           = "wrapped_avframe",
+     .long_name      = NULL_IF_CONFIG_SMALL("AVFrame to AVPacket passthrough"),
+@@ -116,6 +146,7 @@
+     .id             = AV_CODEC_ID_WRAPPED_AVFRAME,
+     .encode2        = wrapped_avframe_encode,
+     .caps_internal  = FF_CODEC_CAP_INIT_THREADSAFE,
++    .pix_fmts       = pix_fmts_all,
+ };
+
+ AVCodec ff_wrapped_avframe_decoder = {

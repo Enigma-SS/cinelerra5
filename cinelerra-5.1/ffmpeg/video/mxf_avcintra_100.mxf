@@ -1,0 +1,3 @@
+mxf libx264
+cin_pix_fmt=yuv422p10le
+avc-intra=100

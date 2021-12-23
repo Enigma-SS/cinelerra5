@@ -1,0 +1,19 @@
+<html>
+<body>
+<script type="text/javascript">
+var B_Lang = window.navigator.language||navigator.browserLanguage;
+var userLang = B_Lang.slice(0,2);
+var ref = 'ShellCmds_en.html';
+switch(userLang){
+//Only uncomment when the file exists with this language, check that the name is correct.
+//  case 'fr':  ref = 'ShellCmds_fr.html';  break; //French 
+//  case 'de':  ref = 'ShellCmds_de.html';  break; //German 
+    case 'ru':  ref = 'ShellCmds_ru.html';  break; //Russian
+    case 'es':  ref = 'ShellCmds_es.html';  break; //Spanish
+//  case 'it':  ref = 'ShellCmds_it.html';  break; //Italian
+//  case 'nb':  ref = 'ShellCmds_nb.html';  break; //Norwegian 
+}
+window.location.href = ref;
+</script>
+</body>
+</html>

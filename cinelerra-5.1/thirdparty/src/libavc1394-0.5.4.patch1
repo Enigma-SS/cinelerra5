@@ -1,0 +1,8 @@
+--- ./Makefile.am.orig	2021-11-26 08:50:04.775736222 +0300
++++ ./Makefile.am	2021-11-26 08:50:18.707736223 +0300
+@@ -1,4 +1,4 @@
+-SUBDIRS = common libavc1394 librom1394 test
++SUBDIRS = common libavc1394 librom1394 
+ MAINTAINERCLEANFILES = Makefile.in aclocal.m4 configure config.h.in \
+ 	stamp-h.in
+ EXTRA_DIST = libavc1394.pc libavc1394.spec

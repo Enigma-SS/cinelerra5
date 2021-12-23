@@ -1,0 +1,19 @@
+--- mjpegtools-2.1.0/y4mdenoise/newdenoise.cc.orig	2021-07-23 14:03:35.999564700 +0300
++++ mjpegtools-2.1.0/y4mdenoise/newdenoise.cc	2021-07-23 14:04:35.779564703 +0300
+@@ -1852,14 +1852,14 @@
+ 	if (nErr != 0)
+ 		mjpeg_error_exit1 ("pthread_attr_init() failed: %s",
+ 			strerror (nErr));
+-
++#if !defined(__TERMUX__)
+ 	// Inherit scheduling parameters from the main thread.
+ 	nErr = pthread_attr_setinheritsched (&sThreadAttributes,
+ 		PTHREAD_INHERIT_SCHED);
+ 	if (nErr != 0)
+ 		mjpeg_error_exit1 ("pthread_attr_setinheritsched() failed: %s",
+ 			strerror (nErr));
+-	
++#endif
+ 	// Create the thread.
+ 	nErr = pthread_create (&m_oThreadInfo,
+ 		&sThreadAttributes, WorkLoop, (void *)this);

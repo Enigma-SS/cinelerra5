@@ -1,0 +1,6 @@
+flac flac
+# Flac is a lossless audio codec with good compression
+# and relatively low CPU load. Flac is suitable for
+# permanent archiving of audio.
+# Compression: 0-8 (fast-high), where 5 is used as standard.
+#compression_level 8

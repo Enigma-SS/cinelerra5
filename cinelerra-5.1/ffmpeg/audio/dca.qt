@@ -1,0 +1,3 @@
+mov dca
+# dca is an audio file format that uses opus audio packets and json metadata
+strict -2

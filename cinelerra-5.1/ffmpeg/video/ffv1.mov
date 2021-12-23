@@ -1,0 +1,9 @@
+mov ffv1
+#coder=0
+context=1
+g=1
+level=3
+threads=16
+slices=16
+slicecrc=1
+#pass=2

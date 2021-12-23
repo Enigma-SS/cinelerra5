@@ -1,0 +1,13 @@
+fmp4 libx264
+maxrate=20000000
+bufsize=20000000
+cin_pix_fmt yuv444p
+preset=slow
+crf=18
+g=30
+bf=2
+color_trc=bt709
+color_primaries=bt709
+colorspace=bt709
+refs=4
+x264-params cabac=1:me_range=24:bframes=2:keyint=60:keyint_min=25:qpmin=0:qpmax=69:qpstep=4

@@ -1,0 +1,12 @@
+diff --git a/libavcodec/vdpau_mpeg12.c b/libavcodec/vdpau_mpeg12.c
+index 72220ffb4e..5687c416c9 100644
+--- a/libavcodec/vdpau_mpeg12.c
++++ b/libavcodec/vdpau_mpeg12.c
+@@ -114,6 +114,7 @@ const AVHWAccel ff_mpeg1_vdpau_hwaccel = {
+     .frame_priv_data_size = sizeof(struct vdpau_picture_context),
+     .init           = vdpau_mpeg1_init,
+     .uninit         = ff_vdpau_common_uninit,
++    .frame_params   = ff_vdpau_common_frame_params,
+     .priv_data_size = sizeof(VDPAUContext),
+     .caps_internal  = HWACCEL_CAP_ASYNC_SAFE,
+ };

@@ -1,0 +1,4 @@
+image2 dpx
+cin_pix_fmt=rgb48le
+# this codec creates a set of image file in a directory
+# use an image2 file name like /dir/image%05d.dpx

@@ -1,0 +1,8 @@
+matroska ffv1
+# FFV1 works lossless and is suitable for the
+# permanent archiving of videos. Flac is often
+# used as audio codec for this purpose.
+# ffmpeg --help encoder=ffv1
+#threads=8
+context=1
+slices=30

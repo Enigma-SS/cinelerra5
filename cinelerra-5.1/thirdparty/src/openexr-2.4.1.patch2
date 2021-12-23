@@ -1,0 +1,12 @@
+--- openexr-2.4.1/OpenEXR/Makefile.am.orig	2021-12-12 21:07:51.158269018 +0300
++++ openexr-2.4.1/OpenEXR/Makefile.am	2021-12-12 21:09:04.350269022 +0300
+@@ -10,8 +10,7 @@
+ ACLOCAL_AMFLAGS = -I m4
+
+ SUBDIRS = config IlmImf IlmImfUtil IlmImfTest IlmImfUtilTest \
+-	  IlmImfFuzzTest exrheader exrmaketiled IlmImfExamples doc \
+-	  exrstdattr exrmakepreview exrenvmap exrmultiview exrmultipart exr2aces
++	  doc
+
+ DIST_SUBDIRS = \
+	$(SUBDIRS)

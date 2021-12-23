@@ -1,0 +1,4 @@
+avi dvvideo
+cin_pix_fmt=yuv420p
+field_order=bb
+# 720x576, 25 fps

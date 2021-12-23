@@ -1,0 +1,43 @@
+diff --git a/configure.ac b/configure.ac
+index f880918..66e24a0 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -51,7 +51,7 @@ AC_SUBST(HTML_CHECK_RESULT)
+ 
+ # Checks for pkg-config packages
+ PKG_CHECK_MODULES(XCBPROTO, xcb-proto >= 1.13)
+-NEEDED="pthread-stubs xau >= 0.99.2"
++NEEDED="xau >= 0.99.2"
+ PKG_CHECK_MODULES(NEEDED, $NEEDED)
+ 
+ have_xdmcp="no"
+diff --git a/src/xcb_in.c b/src/xcb_in.c
+index 73209e0..0dd7314 100644
+--- a/src/xcb_in.c
++++ b/src/xcb_in.c
+@@ -966,7 +966,7 @@ void _xcb_in_replies_done(xcb_connection_t *c)
+ 
+ int _xcb_in_read(xcb_connection_t *c)
+ {
+-    int n;
++    int n, err;
+ 
+ #if HAVE_SENDMSG
+     struct iovec    iov = {
+@@ -999,6 +999,7 @@ int _xcb_in_read(xcb_connection_t *c)
+ #else
+     n = recv(c->fd, c->in.queue + c->in.queue_len, sizeof(c->in.queue) - c->in.queue_len, 0);
+ #endif
++    err = errno;
+     if(n > 0) {
+ #if HAVE_SENDMSG
+         struct cmsghdr *hdr;
+@@ -1039,7 +1040,7 @@ int _xcb_in_read(xcb_connection_t *c)
+     }
+ #endif
+ #ifndef _WIN32
+-    if((n > 0) || (n < 0 && errno == EAGAIN))
++    if((n > 0) || (n < 0 && (err == EAGAIN || err == ENOENT || err == 0)))
+ #else
+     if((n > 0) || (n < 0 && WSAGetLastError() == WSAEWOULDBLOCK))
+ #endif /* !_WIN32 */

@@ -1,0 +1,6 @@
+matroska pcm_s24le
+# PCM signed 24-bit little-endian (pcm_s24le) in
+# Matroska (Audio) container.
+# The extension should be "mka".
+# ffmpeg --help encoder=pcm_s24le
+# ffmpeg --help muxer=matroska

@@ -1,0 +1,528 @@
+diff --git a/cinelerra-5.1/Makefile.devel b/cinelerra-5.1/Makefile.devel
+index 5531330..ad671f5 100644
+--- a/cinelerra-5.1/Makefile.devel
++++ b/cinelerra-5.1/Makefile.devel
+@@ -4,7 +4,7 @@ TOPDIR := $(CURDIR)
+ CFLAGS ?= -ggdb
+ export CFLAGS_ := $(CFLAGS)
+ 
+-cpus:=$(shell grep -c "^proc" /proc/cpuinfo)
++cpus:=$(shell sysctl -n hw.ncpu)
+ jobs:=-j$(shell echo $$(($(cpus) + $(cpus)/2 +2)))
+ MAKEJ := $(MAKE) $(jobs)
+ 
+diff --git a/cinelerra-5.1/cinelerra/Makefile b/cinelerra-5.1/cinelerra/Makefile
+index f4e536b..9b76136 100644
+--- a/cinelerra-5.1/cinelerra/Makefile
++++ b/cinelerra-5.1/cinelerra/Makefile
+@@ -512,7 +512,7 @@ all:	$(OUTPUT) $(CUTADS) $(BDWRITE) $(LV2UI)
+ $(OUTPUT): $(OBJS) $(THEME_DATA) $(DCRAW) $(LIBRARIES)
+ 	$(LINKER) `cat $(OBJDIR)/objs`
+ 	$(if $(findstring -g,$(CFLAGS)),objcopy --only-keep-debug $(OUTPUT) $(OUTPUT_G))
+-	$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
++	#$(if $(findstring -ggdb,$(CFLAGS)),,strip $(OUTPUT))
+ 	ln -f -s ../bin/$(WANT_CIN) ci
+ 
+ ifneq ($(WANT_COMMERCIAL),no)
+diff --git a/cinelerra-5.1/cinelerra/bdcreate.C b/cinelerra-5.1/cinelerra/bdcreate.C
+index e18ebee..eade28a 100644
+--- a/cinelerra-5.1/cinelerra/bdcreate.C
++++ b/cinelerra-5.1/cinelerra/bdcreate.C
+@@ -24,8 +24,8 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <errno.h>
+-#include <sys/stat.h>
+-#include <sys/statfs.h>
++#include <sys/param.h>
++#include <sys/mount.h>
+ 
+ // BD Creation
+ 
+diff --git a/cinelerra-5.1/cinelerra/bdwrite.C b/cinelerra-5.1/cinelerra/bdwrite.C
+index 6a2b4ca..78cf9be 100644
+--- a/cinelerra-5.1/cinelerra/bdwrite.C
++++ b/cinelerra-5.1/cinelerra/bdwrite.C
+@@ -38,7 +38,7 @@
+ #include <stdint.h>
+ #include <stdlib.h>
+ #include <string.h>
+-#include <endian.h>
++#include <sys/endian.h>
+ #include <limits.h>
+ #include <sys/stat.h>
+ // work arounds (centos)
+diff --git a/cinelerra-5.1/cinelerra/cutads.C b/cinelerra-5.1/cinelerra/cutads.C
+index ac58d56..f6690cf 100644
+--- a/cinelerra-5.1/cinelerra/cutads.C
++++ b/cinelerra-5.1/cinelerra/cutads.C
+@@ -23,14 +23,6 @@
+ using namespace std;
+ #define fail(s) do { printf("fail %s%s:%d\n",__func__,#s,__LINE__); return 1; } while(0)
+ 
+-/* missing from system headers, no /usr/include <linux/ioprio.h>
+- *   IOPRIO_WHO_PROCESS, IOPRIO_CLASS_SHIFT, IOPRIO_CLASS_IDLE */
+-enum { IOPRIO_CLASS_NONE, IOPRIO_CLASS_RT, IOPRIO_CLASS_BE, IOPRIO_CLASS_IDLE, };
+-#define IO_CLASS(n) (((int)(n)) << 13)
+-#define IO_WHO_PROCESS  1
+-#include <sys/syscall.h>
+-#include <asm/unistd.h>
+-
+ // commercial edge detection:
+ // must have audio < min_audio
+ //   and within +- check_margin seconds of low audio
+@@ -55,11 +47,6 @@ class Video;
+ class Audio;
+ class Scan;
+ 
+-static int ioprio_set(int which, int who, int ioprio)
+-{
+-	return syscall(SYS_ioprio_set, which, who, ioprio);
+-}
+-
+ static inline int clip(int v, int mn, int mx)
+ {
+   return v<mn ? mn : v>mx ? mx : v;
+@@ -617,7 +604,6 @@ class Scan
+ 	const char *asset_path;
+ 	static void set_priority(int pr, int io) {
+ 		setpriority(PRIO_PROCESS, 0, pr);  // lowest cpu priority
+-		ioprio_set(IO_WHO_PROCESS, 0, IO_CLASS(io));
+ 	}
+ 	class low_priority { public:
+ 		low_priority() { set_priority(19, IOPRIO_CLASS_IDLE); }
+diff --git a/cinelerra-5.1/cinelerra/dvdcreate.C b/cinelerra-5.1/cinelerra/dvdcreate.C
+index f4587fc..dd0c883 100644
+--- a/cinelerra-5.1/cinelerra/dvdcreate.C
++++ b/cinelerra-5.1/cinelerra/dvdcreate.C
+@@ -24,8 +24,8 @@
+ #include <unistd.h>
+ #include <fcntl.h>
+ #include <errno.h>
+-#include <sys/stat.h>
+-#include <sys/statfs.h>
++#include <sys/param.h>
++#include <sys/mount.h>
+ 
+ 
+ #define DVD_PAL_4x3	0
+diff --git a/cinelerra-5.1/cinelerra/file.C b/cinelerra-5.1/cinelerra/file.C
+index f9571c9..d1197c3 100644
+--- a/cinelerra-5.1/cinelerra/file.C
++++ b/cinelerra-5.1/cinelerra/file.C
+@@ -1589,7 +1589,10 @@ int File::record_fd()
+ void File::get_exe_path(char *result, char *bnp)
+ {
+ // Get executable path, basename
+-	int len = readlink("/proc/self/exe", result, BCTEXTLEN-1);
++	char exe_path[BCTEXTLEN];
++	sprintf(exe_path,"/proc/%d/file",getpid());
++	int len = readlink(exe_path, result, BCTEXTLEN-1);
++
+ 	if( len >= 0 ) {
+ 		result[len] = 0;
+ 		char *ptr = strrchr(result, '/');
+diff --git a/cinelerra-5.1/cinelerra/indexfile.C b/cinelerra-5.1/cinelerra/indexfile.C
+index 87b8853..ad75d24 100644
+--- a/cinelerra-5.1/cinelerra/indexfile.C
++++ b/cinelerra-5.1/cinelerra/indexfile.C
+@@ -70,9 +70,7 @@
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#ifdef HAVE_ISOFS
+-#include <linux/iso_fs.h>
+-#endif
++#include <isofs/cd9660/iso.h>
+ 
+ // check for isofs volume_id for dvd/cdrom
+ 
+diff --git a/cinelerra-5.1/configure.ac b/cinelerra-5.1/configure.ac
+index ee75006..071d8e7 100644
+--- a/cinelerra-5.1/configure.ac
++++ b/cinelerra-5.1/configure.ac
+@@ -18,8 +18,18 @@ CFG_CFLAGS+=" -Wno-unused-result"
+ CFG_CFLAGS+=" -Wno-stringop-overflow"
+ CFG_CFLAGS+=" -Wno-format-truncation"
+ CFG_CFLAGS+=" -Wno-format-overflow"
++CFG_CFLAGS+=" -Wno-unknown-warning-option"
+ CFG_CFLAGS+=" -Wno-parentheses"
+ CFG_CFLAGS+=" -Wno-stringop-truncation"
++CFG_CFLAGS+=" -Wno-gnu-designator"
++CFG_CFLAGS+=" -Wno-missing-braces"
++CFG_CFLAGS+=" -Wno-overloaded-virtual"
++CFG_CFLAGS+=" -Wno-self-assign-field"
++CFG_CFLAGS+=" -Wno-sometimes-uninitialized"
++CFG_CFLAGS+=" -Wno-tautological-pointer-compare"
++CFG_CFLAGS+=" -Wno-unused-function"
++CFG_CFLAGS+=" -Wno-unused-private-field"
++CFG_CFLAGS+=" -Wno-infinite-recursion"
+ CFG_CFLAGS+=" -D__STDC_CONSTANT_MACROS"
+ CFG_CFLAGS+=" -D__STDC_LIMIT_MACROS"
+ CFG_CFLAGS+=" -DPNG_SKIP_SETJMP_CHECK=1"
+@@ -140,7 +150,7 @@ AC_SUBST(MAK_INSTALLS)
+ AC_SUBST(MAK_UNINSTALLS)
+ 
+ if test "x$WANT_JOBS" = "xauto"; then
+-  CPUS=`grep -c "^proc" /proc/cpuinfo`
++  CPUS=`sysctl -n hw.ncpu`
+   WANT_JOBS=`expr $CPUS + $CPUS / 2 + 2`
+ fi
+ 
+@@ -1132,6 +1142,11 @@ if test "x$CFG_LDFLAGS" != "x" ; then
+   echo ""
+ fi
+ 
++if test "x$BSD" != "x" ; then
++  echo "CFLAGS += -DNO_PRCTL"
++  echo "CFLAGS += -DNO_TID"
++  echo "CFLAGS += -DNO_GDB"
++fi
+ if test "x$CYGWIN" != "x" ; then
+   echo 'FF_PATH ?= /usr/local'
+   echo 'LDFLAGS += -L$(FF_PATH)/lib'
+@@ -1147,11 +1162,6 @@ if test "x$CYGWIN" != "x" ; then
+ else
+   LDFLAGS+=" -z noexecstack"
+ fi
+-if test "x$BSD" != "x" ; then
+-  echo "CFLAGS += -DNO_PRCTL"
+-  echo "CFLAGS += -DNO_TID"
+-  echo "CFLAGS += -DNO_GDB"
+-fi
+ 
+ if test "x$WANT_X264_HIDEPTH" = "xyes" ; then
+   X264_CFG_PARAMS="$X264_CFG_PARAMS --bit-depth=10"
+diff --git a/cinelerra-5.1/db/tdb.h b/cinelerra-5.1/db/tdb.h
+index 8ee8800..9a17091 100644
+--- a/cinelerra-5.1/db/tdb.h
++++ b/cinelerra-5.1/db/tdb.h
+@@ -32,7 +32,7 @@ inline void operator delete[](void *t,size_t n) { free(t); }
+ #endif
+ 
+ #define ZMEDIA
+-#define ZFUTEX
++//#define ZFUTEX
+ #ifdef ZFUTEX
+ #include <unistd.h>
+ #include <endian.h>
+diff --git a/cinelerra-5.1/guicast/Makefile b/cinelerra-5.1/guicast/Makefile
+index 201c5a4..1c3822f 100644
+--- a/cinelerra-5.1/guicast/Makefile
++++ b/cinelerra-5.1/guicast/Makefile
+@@ -95,7 +95,7 @@ $(shell echo $(OBJS) > $(OBJDIR)/objs)
+ all: $(OUTPUT) $(UTILS)
+ 
+ $(BCXFER):	bccmdl.py bcxfer.C bcxfer.h
+-	python < ./bccmdl.py
++	python2.7 < ./bccmdl.py
+ 	+$(MAKE) -C xfer
+ 
+ $(OUTPUT): $(OBJS) $(BCXFER)
+diff --git a/cinelerra-5.1/guicast/bclistbox.h b/cinelerra-5.1/guicast/bclistbox.h
+index ce34ffc..0e38913 100644
+--- a/cinelerra-5.1/guicast/bclistbox.h
++++ b/cinelerra-5.1/guicast/bclistbox.h
+@@ -187,7 +187,9 @@ public:
+ 
+ // take_focus - used by the suggestion box to keep it from taking focus from the
+ // textbox
+-	int activate(int take_focus = 1);
++	int activate() {  return activate(1); }
++	int activate(int take_focus);
++
+ 	int activate(int x, int y, int w=-1, int h=-1);
+ 	int deactivate();
+ 	int is_active();
+diff --git a/cinelerra-5.1/guicast/bcpan.h b/cinelerra-5.1/guicast/bcpan.h
+index 40f5971..73d4758 100644
+--- a/cinelerra-5.1/guicast/bcpan.h
++++ b/cinelerra-5.1/guicast/bcpan.h
+@@ -93,7 +93,8 @@ public:
+ 		int &stick_x,
+ 		int &stick_y);
+ 	static int rdtoxy(int &x, int &y, int a, int virtual_r);
+-	int activate(int popup_x = -1, int popup_y = -1);
++	int activate(int popup_x, int popup_y);
++	int activate() { return activate(-1,-1); }
+ 	int deactivate();
+ 	float* get_values();
+ 
+diff --git a/cinelerra-5.1/guicast/bcresources.C b/cinelerra-5.1/guicast/bcresources.C
+index 1d52855..c8d93bd 100644
+--- a/cinelerra-5.1/guicast/bcresources.C
++++ b/cinelerra-5.1/guicast/bcresources.C
+@@ -39,6 +39,7 @@
+ #include <iconv.h>
+ #include <sys/ipc.h>
+ #include <sys/shm.h>
++#include <sys/sysctl.h>
+ #include <X11/extensions/XShm.h>
+ #include <fontconfig/fontconfig.h>
+ #include <fontconfig/fcfreetype.h>
+@@ -298,23 +299,12 @@ int BC_Resources::machine_cpus = 1;
+ 
+ int BC_Resources::get_machine_cpus()
+ {
+-	int cpus = 1;
+-	FILE *proc = fopen("/proc/cpuinfo", "r");
+-	if( proc ) {
+-		char string[BCTEXTLEN], *cp;
+-		while(!feof(proc) && fgets(string, sizeof(string), proc) ) {
+-			if( !strncasecmp(string, "processor", 9) &&
+-			    (cp = strchr(string, ':')) != 0 ) {
+-				int n = atol(cp+1) + 1;
+-				if( n > cpus ) cpus = n;
+-			}
+-			else if( !strncasecmp(string, "cpus detected", 13) &&
+-			    (cp = strchr(string, ':')) != 0 )
+-				cpus = atol(cp+1);
+-		}
+-		fclose(proc);
+-	}
+-	return cpus;
++	int mib[2], ncpu;
++	size_t len = sizeof(ncpu);
++	mib[0] = CTL_HW;
++	mib[1] = HW_NCPU;
++	if( sysctl(mib, 2, &ncpu, &len, 0, 0) ) ncpu = 1;
++	return ncpu;
+ }
+ 
+ void BC_Resources::new_vframes(int n, VFrame *vframes[], ...)
+@@ -367,8 +357,8 @@ BC_Resources::BC_Resources(float x_scale, float y_scale)
+ 	BC_WindowBase::resources = this;
+ 	synchronous = 0;
+ 	vframe_shm = 0;
+-	use_shm = -1;
+-	shm_reply = 1;
++	use_shm = 0;
++	shm_reply = 0;
+ 
+ 	if( x_scale <= 0 ) x_scale = 1;
+ 	if( y_scale <= 0 ) y_scale = x_scale;
+diff --git a/cinelerra-5.1/guicast/bcsignals.C b/cinelerra-5.1/guicast/bcsignals.C
+index ffc8a1c..b83b328 100644
+--- a/cinelerra-5.1/guicast/bcsignals.C
++++ b/cinelerra-5.1/guicast/bcsignals.C
+@@ -395,70 +395,72 @@ const char* BC_Signals::sig_to_str(int number)
+ #include <sys/wait.h>
+ #include "thread.h"
+ 
++#define SC_(r)mc_##r
++
+ #if __i386__
+-#define IP eip
+-#define sigregs_t sigcontext
++#define IP SC_(eip)
++#define sigregs_t mcontext_t
+ 
+ static void reg_dump(FILE *fp,sigregs_t *rp)
+ {
+ 	fprintf(fp,"REGS:\n");
+-	fprintf(fp,"  gs: %04x:%04x\n", rp->gs,rp->__gsh);
+-	fprintf(fp,"  fs: %04x:%04x\n", rp->fs,rp->__fsh);
+-	fprintf(fp,"  es: %04x:%04x\n", rp->es,rp->__esh);
+-	fprintf(fp,"  ds: %04x:%04x\n", rp->ds,rp->__dsh);
+-	fprintf(fp," edi: %14p %d\n", (void*)rp->edi,rp->edi);
+-	fprintf(fp," esi: %14p %d\n", (void*)rp->esi,rp->esi);
+-	fprintf(fp," ebp: %14p %d\n", (void*)rp->ebp,rp->ebp);
+-	fprintf(fp," esp: %14p %d\n", (void*)rp->esp,rp->esp);
+-	fprintf(fp," ebx: %14p %d\n", (void*)rp->ebx,rp->ebx);
+-	fprintf(fp," edx: %14p %d\n", (void*)rp->edx,rp->edx);
+-	fprintf(fp," ecx: %14p %d\n", (void*)rp->ecx,rp->ecx);
+-	fprintf(fp," eax: %14p %d\n", (void*)rp->eax,rp->eax);
+-	fprintf(fp," trapno: %14p %d\n", (void*)rp->trapno,rp->trapno);
+-	fprintf(fp," err: %14p %d\n", (void*)rp->err,rp->err);
+-	fprintf(fp," eip: %14p %d\n", (void*)rp->eip,rp->eip);
+-	fprintf(fp," cs: %04xd : %04x\n", rp->cs,rp->__csh);
+-	fprintf(fp," eflags: %14p %d\n", (void*)rp->eflags,rp->eflags);
+-	fprintf(fp," esp_at_signal: %p %d\n", (void*)rp->esp_at_signal,rp->esp_at_signal);
+-	fprintf(fp," ss: %04xd : %04x\n", rp->ss,rp->__ssh);
+-	fprintf(fp," oldmask: %14p %d\n", (void*)rp->oldmask,rp->oldmask);
+-	fprintf(fp," cr2: %14p %d\n", (void*)rp->cr2,rp->cr2);
++	fprintf(fp,"  gs: %04x:%04x\n", rp->mc_gs,rp->mc_gs);
++	fprintf(fp,"  fs: %04x:%04x\n", rp->mc_fs,rp->mc_fs);
++	fprintf(fp,"  es: %04x:%04x\n", rp->mc_es,rp->mc_es);
++	fprintf(fp,"  ds: %04x:%04x\n", rp->mc_ds,rp->mc_ds);
++	fprintf(fp," edi: %14p %d\n", (void*)rp->mc_edi,rp->mc_edi);
++	fprintf(fp," esi: %14p %d\n", (void*)rp->mc_esi,rp->mc_esi);
++	fprintf(fp," ebp: %14p %d\n", (void*)rp->mc_ebp,rp->mc_ebp);
++	fprintf(fp," esp: %14p %d\n", (void*)rp->mc_esp,rp->mc_esp);
++	fprintf(fp," ebx: %14p %d\n", (void*)rp->mc_ebx,rp->mc_ebx);
++	fprintf(fp," edx: %14p %d\n", (void*)rp->mc_edx,rp->mc_edx);
++	fprintf(fp," ecx: %14p %d\n", (void*)rp->mc_ecx,rp->mc_ecx);
++	fprintf(fp," eax: %14p %d\n", (void*)rp->mc_eax,rp->mc_eax);
++	fprintf(fp," trapno: %14p %d\n", (void*)rp->mc_trapno,rp->mc_trapno);
++	fprintf(fp," err: %14p %d\n", (void*)rp->mc_err,rp->mc_err);
++	fprintf(fp," eip: %14p %d\n", (void*)rp->mc_eip,rp->mc_eip);
++	fprintf(fp," cs: %04x\n", (unsigned)rp->mc_cs);
++	fprintf(fp," eflags: %14p %d\n", (void*)rp->mc_eflags,rp->mc_eflags);
++	fprintf(fp," esp_at_signal: %p %d\n", (void*)rp->mc_esp_at_signal,rp->mc_esp_at_signal);
++	fprintf(fp," ss: %04xd : %04x\n", rp->mc_ss,rp->mc_ss);
++//	fprintf(fp," oldmask: %14p %d\n", (void*)rp->mc_oldmask,rp->mc_oldmask);
++//	fprintf(fp," cr2: %14p %d\n", (void*)rp->mc_cr2,rp->mc_cr2);
+ 	fprintf(fp,"\n");
+ }
+ #endif
+ 
+ #if __x86_64__
+-#define IP rip
+-#define sigregs_t sigcontext
++#define IP SC_(rip)
++#define sigregs_t mcontext_t
+ 
+ static void reg_dump(FILE *fp,sigregs_t *rp)
+ {
+ 	fprintf(fp,"REGS:\n");
+-	fprintf(fp,"  r8: %20p %jd\n", (void*)rp->r8,rp->r8);
+-	fprintf(fp,"  r9: %20p %jd\n", (void*)rp->r9,rp->r9);
+-	fprintf(fp," r10: %20p %jd\n", (void*)rp->r10,rp->r10);
+-	fprintf(fp," r11: %20p %jd\n", (void*)rp->r11,rp->r11);
+-	fprintf(fp," r12: %20p %jd\n", (void*)rp->r12,rp->r12);
+-	fprintf(fp," r13: %20p %jd\n", (void*)rp->r13,rp->r13);
+-	fprintf(fp," r14: %20p %jd\n", (void*)rp->r14,rp->r14);
+-	fprintf(fp," r15: %20p %jd\n", (void*)rp->r15,rp->r15);
+-	fprintf(fp," rdi: %20p %jd\n", (void*)rp->rdi,rp->rdi);
+-	fprintf(fp," rsi: %20p %jd\n", (void*)rp->rsi,rp->rsi);
+-	fprintf(fp," rbp: %20p %jd\n", (void*)rp->rbp,rp->rbp);
+-	fprintf(fp," rbx: %20p %jd\n", (void*)rp->rbx,rp->rbx);
+-	fprintf(fp," rdx: %20p %jd\n", (void*)rp->rdx,rp->rdx);
+-	fprintf(fp," rax: %20p %jd\n", (void*)rp->rax,rp->rax);
+-	fprintf(fp," rcx: %20p %jd\n", (void*)rp->rcx,rp->rcx);
+-	fprintf(fp," rsp: %20p %jd\n", (void*)rp->rsp,rp->rsp);
+-	fprintf(fp," rip: %20p %jd\n", (void*)rp->rip,rp->rip);
+-	fprintf(fp," eflags: %14p %jd\n", (void*)rp->eflags,rp->eflags);
+-	fprintf(fp,"  cs: %04x\n", rp->cs);
+-	fprintf(fp,"  gs: %04x\n", rp->gs);
+-	fprintf(fp,"  fs: %04x\n", rp->fs);
+-	fprintf(fp," err: %20p %jd\n", (void*)rp->err,rp->err);
+-	fprintf(fp," trapno: %20p %jd\n", (void*)rp->trapno,rp->trapno);
+-	fprintf(fp," oldmask: %20p %jd\n", (void*)rp->oldmask,rp->oldmask);
+-	fprintf(fp," cr2: %20p %jd\n", (void*)rp->cr2,rp->cr2);
++	fprintf(fp,"  r8: %20p %jd\n", (void*)rp->mc_r8,rp->mc_r8);
++	fprintf(fp,"  r9: %20p %jd\n", (void*)rp->mc_r9,rp->mc_r9);
++	fprintf(fp," r10: %20p %jd\n", (void*)rp->mc_r10,rp->mc_r10);
++	fprintf(fp," r11: %20p %jd\n", (void*)rp->mc_r11,rp->mc_r11);
++	fprintf(fp," r12: %20p %jd\n", (void*)rp->mc_r12,rp->mc_r12);
++	fprintf(fp," r13: %20p %jd\n", (void*)rp->mc_r13,rp->mc_r13);
++	fprintf(fp," r14: %20p %jd\n", (void*)rp->mc_r14,rp->mc_r14);
++	fprintf(fp," r15: %20p %jd\n", (void*)rp->mc_r15,rp->mc_r15);
++	fprintf(fp," rdi: %20p %jd\n", (void*)rp->mc_rdi,rp->mc_rdi);
++	fprintf(fp," rsi: %20p %jd\n", (void*)rp->mc_rsi,rp->mc_rsi);
++	fprintf(fp," rbp: %20p %jd\n", (void*)rp->mc_rbp,rp->mc_rbp);
++	fprintf(fp," rbx: %20p %jd\n", (void*)rp->mc_rbx,rp->mc_rbx);
++	fprintf(fp," rdx: %20p %jd\n", (void*)rp->mc_rdx,rp->mc_rdx);
++	fprintf(fp," rax: %20p %jd\n", (void*)rp->mc_rax,rp->mc_rax);
++	fprintf(fp," rcx: %20p %jd\n", (void*)rp->mc_rcx,rp->mc_rcx);
++	fprintf(fp," rsp: %20p %jd\n", (void*)rp->mc_rsp,rp->mc_rsp);
++	fprintf(fp," rip: %20p %jd\n", (void*)rp->mc_rip,rp->mc_rip);
++	fprintf(fp," eflags: %14p %u\n", (void*)((unsigned long)rp->mc_flags),rp->mc_flags);
++	fprintf(fp,"  cs: %04x\n", (unsigned)rp->mc_cs);
++	fprintf(fp,"  gs: %04x\n", (unsigned)rp->mc_gs);
++	fprintf(fp,"  fs: %04x\n", (unsigned)rp->mc_fs);
++	fprintf(fp," err: %20p %jd\n", (void*)rp->mc_err,rp->mc_err);
++	fprintf(fp," trapno: %20p %d\n", (void*)((unsigned long)rp->mc_trapno),rp->mc_trapno);
++//	fprintf(fp," oldmask: %20p %jd\n", (void*)rp->mc_oldmask,rp->mc_oldmask);
++//	fprintf(fp," cr2: %20p %jd\n", (void*)rp->mc_cr2,rp->mc_cr2);
+ 	fprintf(fp,"\n");
+ }
+ 
+@@ -492,7 +494,7 @@ static void handle_dump(int n, siginfo_t * info, void *sc)
+ 	void *ip = 0;
+ #ifndef NO_CTX
+ 	ucontext_t *uc = (ucontext_t *)sc;
+-	struct sigregs_t *c = (struct sigregs_t *)&uc->uc_mcontext;
++	sigregs_t *c = (sigregs_t *)&uc->uc_mcontext;
+ 	ip = (void *)c->IP;
+ #endif
+ 	fprintf(stderr,"** %s at %p in pid %d, tid %d\n",
+diff --git a/cinelerra-5.1/guicast/bctrace.C b/cinelerra-5.1/guicast/bctrace.C
+index 7e45392..2d08b46 100644
+--- a/cinelerra-5.1/guicast/bctrace.C
++++ b/cinelerra-5.1/guicast/bctrace.C
+@@ -309,7 +309,7 @@ void BC_Trace::dump_traces(FILE *fp)
+ 	}
+ }
+ 
+-void trace_info::set_owner() { owner = pthread_self(); }
++void trace_info::set_owner() { owner = (unsigned long)pthread_self(); }
+ void trace_info::unset_owner() { owner = 0; }
+ 
+ void BC_Trace::dump_locks(FILE *fp)
+@@ -322,7 +322,7 @@ void BC_Trace::dump_locks(FILE *fp)
+ 		fprintf(fp,"    %p %s, %s %p%s",
+ 			p->info, p->title, p->loc,
+ 			(void*)p->tid, p->is_owner ? " *" : "");
+-		if( p->info->owner && p->info->owner != p->tid )
++		if( p->info->owner && p->info->owner != (unsigned long)p->tid )
+ 			fprintf(fp," %p", (void*)p->info->owner);
+ 		fprintf(fp,"\n");
+ 	}
+diff --git a/cinelerra-5.1/guicast/filesystem.h b/cinelerra-5.1/guicast/filesystem.h
+index c976135..5613702 100644
+--- a/cinelerra-5.1/guicast/filesystem.h
++++ b/cinelerra-5.1/guicast/filesystem.h
+@@ -26,6 +26,9 @@
+ #include "bcwindowbase.inc"
+ #include "sizes.h"
+ 
++#define dirent64 dirent
++#define readdir64 readdir
++
+ class FileItem
+ {
+ public:
+diff --git a/cinelerra-5.1/guicast/thread.C b/cinelerra-5.1/guicast/thread.C
+index 50b52a4..321ab4f 100644
+--- a/cinelerra-5.1/guicast/thread.C
++++ b/cinelerra-5.1/guicast/thread.C
+@@ -55,13 +55,6 @@ void* Thread::entrypoint(void *parameters)
+ 	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
+ 	thread->cancel_enabled = false;
+ 
+-// Set realtime here since it doesn't work in start
+-	if( thread->realtime && getuid() == 0 ) {
+-		struct sched_param param = { sched_priority : 1 };
+-		if(pthread_setschedparam(thread->tid, SCHED_RR, &param) < 0)
+-			perror("Thread::entrypoint pthread_attr_setschedpolicy");
+-	}
+-
+ 	thread->run();
+ 	thread->finished = true;
+ 	if( !thread->synchronous ) {
+diff --git a/cinelerra-5.1/plugins/Makefile b/cinelerra-5.1/plugins/Makefile
+index e63682d..072653b 100644
+--- a/cinelerra-5.1/plugins/Makefile
++++ b/cinelerra-5.1/plugins/Makefile
+@@ -36,7 +36,6 @@ DIRS = $(OPENCV_OBJS) \
+ 	brightness \
+ 	burn \
+ 	C41 \
+-	cdripper \
+ 	chorus \
+ 	chromakey \
+ 	chromakeyhsv \
+@@ -177,6 +176,8 @@ DIRS = $(OPENCV_OBJS) \
+ #	denoisemjpeg \
+ # duplicate
+ #	vocoder \
++# not in bsd
++#	cdripper \
+ 
+ PLUGIN_DIR = $(BINDIR)/plugins
+ DATA = $(PLUGIN_DIR)/fonts $(PLUGIN_DIR)/shapes
+diff --git a/cinelerra-5.1/plugins/titler/titler.C b/cinelerra-5.1/plugins/titler/titler.C
+index 0fc6669..68197ab 100644
+--- a/cinelerra-5.1/plugins/titler/titler.C
++++ b/cinelerra-5.1/plugins/titler/titler.C
+@@ -57,8 +57,7 @@
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <string.h>
+-#include <endian.h>
+-#include <byteswap.h>
++#include <sys/endian.h>
+ #include <iconv.h>
+ #include <sys/stat.h>
+ #include <fontconfig/fontconfig.h>

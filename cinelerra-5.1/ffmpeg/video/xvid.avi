@@ -1,0 +1,9 @@
+avi mpeg4
+codec_tag 1145656920
+mbd=rd
+flags=+mv4+aic
+trellis=2
+cmp=2
+subcmp=2
+# bitrate in bits / second!
+b=1000000
